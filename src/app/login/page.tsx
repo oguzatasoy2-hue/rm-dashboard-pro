@@ -66,11 +66,20 @@ export default function LoginPage() {
                         <div className="w-12 h-12 rounded-xl bg-[#EAC54F] shadow-[0_0_30px_rgba(234,197,79,0.4)] flex items-center justify-center mb-6">
                             <span className="text-[#09090B] font-bold text-lg tracking-tighter">ORM</span>
                         </div>
-                        <h1 className="text-2xl font-bold text-white tracking-tight mb-2">Welcome Back</h1>
-                        <p className="text-zinc-500 text-sm text-center mb-2">Enter your credentials to access the Revenue Management System.</p>
-                        <div className="bg-[#EAC54F]/10 border border-[#EAC54F]/20 text-[#EAC54F] px-4 py-2 rounded-lg text-xs font-medium flex items-center gap-2">
-                            <KeyRound size={12} />
-                            <span>Demo access enabled. Click Sign In to proceed.</span>
+                        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 mb-4">
+                            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                            <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Version de Démonstration (SaaS Beta)</span>
+                        </div>
+                        <h1 className="text-2xl font-bold text-white tracking-tight mb-2">ORMpro</h1>
+                        <p className="text-zinc-400 text-sm text-center mb-6 max-w-sm leading-relaxed">
+                            Le Système d'Intelligence Tarifaire & Prédictive Haute Performance.<br /><br />
+                            <span className="text-xs text-zinc-500">
+                                <b>Note :</b> Les données présentées dans cette plateforme proviennent de l'hôtel <i>Le Provençal</i> à des fins de démonstration.
+                            </span>
+                        </p>
+                        <div className="w-full bg-[#EAC54F]/10 border border-[#EAC54F]/20 text-[#EAC54F] px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-3 text-left">
+                            <KeyRound size={14} className="mt-0.5 shrink-0" />
+                            <span>Veuillez utiliser les accès administrateur pré-remplis ci-dessous pour lancer la simulation de l'outil.</span>
                         </div>
                     </motion.div>
 
