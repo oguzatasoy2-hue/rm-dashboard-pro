@@ -10,8 +10,8 @@ const strictEase = [0.16, 1, 0.3, 1] as const;
 
 export default function LoginPage() {
     const router = useRouter();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("admin@leprovencal.com");
+    const [password, setPassword] = useState("admin123");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleLogin = (e: React.FormEvent) => {
@@ -67,7 +67,11 @@ export default function LoginPage() {
                             <span className="text-[#09090B] font-bold text-2xl tracking-tighter">LP</span>
                         </div>
                         <h1 className="text-2xl font-bold text-white tracking-tight mb-2">Welcome Back</h1>
-                        <p className="text-zinc-500 text-sm text-center">Enter your credentials to access the Revenue Management System.</p>
+                        <p className="text-zinc-500 text-sm text-center mb-2">Enter your credentials to access the Revenue Management System.</p>
+                        <div className="bg-[#EAC54F]/10 border border-[#EAC54F]/20 text-[#EAC54F] px-4 py-2 rounded-lg text-xs font-medium flex items-center gap-2">
+                            <KeyRound size={12} />
+                            <span>Demo access enabled. Click Sign In to proceed.</span>
+                        </div>
                     </motion.div>
 
                     <form onSubmit={handleLogin} className="space-y-5">
