@@ -20,8 +20,10 @@ export default function LoginPage() {
 
         setIsSubmitting(true);
 
-        // Simulate Authentication delay then redirect to Dashboard
+        // Simulate Authentication delay 
         setTimeout(() => {
+            // Set simple cookie to bypass middleware for prototype
+            document.cookie = "rm_pro_session=authenticated; path=/; max-age=86400";
             router.push("/");
         }, 1500);
     };
