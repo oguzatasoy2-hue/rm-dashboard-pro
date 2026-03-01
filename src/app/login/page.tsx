@@ -148,6 +148,24 @@ export default function LoginPage() {
                                 {/* Shiny hover effect */}
                                 <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
                             </button>
+
+                            {/* Floating hint for Portfolio visitors */}
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 2, duration: 1 }}
+                                className="absolute -right-24 top-1/2 -translate-y-1/2 hidden lg:flex items-center gap-3"
+                            >
+                                <motion.div
+                                    animate={{ x: [0, 5, 0] }}
+                                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                                >
+                                    <ArrowRight size={20} className="text-[#EAC54F] rotate-180" />
+                                </motion.div>
+                                <span className="text-[10px] font-bold text-[#EAC54F] uppercase tracking-widest whitespace-nowrap bg-[#EAC54F]/10 px-2 py-1 rounded border border-[#EAC54F]/20">
+                                    Click to Demo
+                                </span>
+                            </motion.div>
                         </motion.div>
                     </form>
 
