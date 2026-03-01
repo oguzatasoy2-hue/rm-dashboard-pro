@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Target, LineChart, CalendarDays, Settings, Activity } from "lucide-react";
+import { Target, LineChart, CalendarDays, Settings, Activity, PieChart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
     { name: "Market Insight", href: "/market", icon: LineChart },
     { name: "Forecasting", href: "/forecast", icon: CalendarDays },
     { name: "Rate Parity", href: "/parity", icon: Activity },
+    { name: "STR Benchmark", href: "/str", icon: PieChart },
     { name: "Configuration", href: "/config", icon: Settings },
 ];
 
