@@ -10,7 +10,7 @@ const strictEase = [0.16, 1, 0.3, 1] as const;
 
 export default function LoginPage() {
     const router = useRouter();
-    const [email, setEmail] = useState("admin@leprovencal.com");
+    const [email, setEmail] = useState("admin@ormpro.com");
     const [password, setPassword] = useState("admin123");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -64,7 +64,7 @@ export default function LoginPage() {
                         className="flex flex-col items-center mb-10"
                     >
                         <div className="w-12 h-12 rounded-xl bg-[#EAC54F] shadow-[0_0_30px_rgba(234,197,79,0.4)] flex items-center justify-center mb-6">
-                            <span className="text-[#09090B] font-bold text-2xl tracking-tighter">LP</span>
+                            <span className="text-[#09090B] font-bold text-lg tracking-tighter">ORM</span>
                         </div>
                         <h1 className="text-2xl font-bold text-white tracking-tight mb-2">Welcome Back</h1>
                         <p className="text-zinc-500 text-sm text-center mb-2">Enter your credentials to access the Revenue Management System.</p>
@@ -87,7 +87,7 @@ export default function LoginPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full bg-[#09090B]/50 border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white outline-none focus:border-[#EAC54F]/50 focus:ring-1 focus:ring-[#EAC54F]/50 hover:bg-white/[0.02] hover:border-white/20 transition-all"
-                                placeholder="admin@leprovencal.com"
+                                placeholder="admin@ormpro.com"
                             />
                         </motion.div>
 

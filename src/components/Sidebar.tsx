@@ -27,11 +27,11 @@ export default function Sidebar() {
             {/* Brand */}
             <div className="px-6 mb-12 flex items-center gap-3">
                 <div className="w-8 h-8 rounded-md bg-[#EAC54F] shadow-[0_0_15px_rgba(234,197,79,0.3)] flex items-center justify-center">
-                    <span className="text-[#09090B] font-bold text-lg tracking-tighter">LP</span>
+                    <span className="text-[#09090B] font-bold text-sm tracking-tighter">ORM</span>
                 </div>
                 <div>
-                    <h2 className="text-white font-semibold text-sm tracking-tight leading-tight">Le Provençal</h2>
-                    <p className="text-zinc-500 text-[10px] font-medium uppercase tracking-widest">RM Pro Engine</p>
+                    <h2 className="text-white font-semibold text-sm tracking-tight leading-tight">ORMpro</h2>
+                    <p className="text-zinc-500 text-[10px] font-medium uppercase tracking-widest">RM Engine</p>
                 </div>
             </div>
 

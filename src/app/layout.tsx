@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Le Provençal RM Pro",
+    title: "ORMpro System",
     description: "Next Generation Revenue Management Dashboard",
 };
 

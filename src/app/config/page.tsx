@@ -77,7 +77,7 @@ export default function ConfigPage() {
                                     type="text"
                                     readOnly
                                     className="w-full bg-[#09090B] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-zinc-300 outline-none focus:border-white/20 transition-colors cursor-not-allowed opacity-70"
-                                    value="Le Provençal RM Pro"
+                                    value="ORMpro System Analytics"
                                 />
                             </div>
 
