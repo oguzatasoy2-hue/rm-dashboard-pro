@@ -126,12 +126,12 @@ export default function LoginPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5, duration: 0.6, ease: strictEase }}
-                            className="pt-4"
+                            className="pt-4 flex flex-col sm:flex-row items-center gap-4 relative"
                         >
                             <button
                                 type="submit"
                                 disabled={isSubmitting || !email || !password}
-                                className="group relative w-full flex items-center justify-center gap-2 bg-white text-[#09090B] font-bold text-sm px-4 py-3.5 rounded-xl hover:bg-white/90 transition-all focus:outline-none focus:ring-4 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+                                className="group relative flex-[1.5] w-full flex items-center justify-center gap-2 bg-white text-[#09090B] font-bold text-sm px-4 py-3.5 rounded-xl hover:bg-white/90 transition-all focus:outline-none focus:ring-4 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
                             >
                                 {isSubmitting ? (
                                     <>
@@ -149,20 +149,21 @@ export default function LoginPage() {
                                 <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
                             </button>
 
-                            {/* Floating hint for Portfolio visitors */}
+                            {/* Floating hint for Portfolio visitors moved inline */}
                             <motion.div
-                                initial={{ opacity: 0, x: 20 }}
+                                initial={{ opacity: 0, x: 10 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 2, duration: 1 }}
-                                className="absolute -right-24 top-1/2 -translate-y-1/2 hidden lg:flex items-center gap-3"
+                                transition={{ delay: 1, duration: 0.8 }}
+                                className="flex-1 flex justify-center sm:justify-start items-center gap-2 shrink-0"
                             >
                                 <motion.div
-                                    animate={{ x: [0, 5, 0] }}
+                                    animate={{ x: [0, -5, 0] }}
                                     transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                                    className="hidden sm:block"
                                 >
-                                    <ArrowRight size={20} className="text-[#EAC54F] rotate-180" />
+                                    <ArrowRight size={16} className="text-[#EAC54F] rotate-180" />
                                 </motion.div>
-                                <span className="text-[10px] font-bold text-[#EAC54F] uppercase tracking-widest whitespace-nowrap bg-[#EAC54F]/10 px-2 py-1 rounded border border-[#EAC54F]/20">
+                                <span className="text-[10px] font-bold text-[#EAC54F] uppercase tracking-widest whitespace-nowrap bg-[#EAC54F]/10 px-3 py-2 sm:px-2 sm:py-1 rounded border border-[#EAC54F]/20">
                                     Click to Demo
                                 </span>
                             </motion.div>
