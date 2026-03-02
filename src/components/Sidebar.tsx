@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Target, LineChart, CalendarDays, Settings, Activity, PieChart } from "lucide-react";
+import { Target, LineChart, CalendarDays, Settings, Activity, PieChart, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -20,7 +20,13 @@ const NAV_ITEMS = [
 
 export default function Sidebar() {
     const pathname = usePathname();
+    const router = useRouter();
     const [hoveredPath, setHoveredPath] = useState<string | null>(null);
+
+    const handleLogout = () => {
+        document.cookie = "rm_pro_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        router.push("/login");
+    };
 
     return (
         <aside className="w-64 h-screen border-r border-white/[0.08] bg-[#09090B] flex flex-col pt-8 pb-4 shrink-0">
@@ -101,14 +107,23 @@ export default function Sidebar() {
 
             {/* User Profile Hook */}
             <div className="px-6 mt-auto">
-                <div className="flex items-center gap-3 py-3 border-t border-white/[0.05]">
-                    <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
-                        <span className="text-white text-xs font-semibold">OA</span>
+                <div className="flex items-center justify-between py-3 border-t border-white/[0.05]">
+                    <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
+                            <span className="text-white text-xs font-semibold">OA</span>
+                        </div>
+                        <div>
+                            <p className="text-white text-xs font-medium">Oğuz Atasoy</p>
+                            <p className="text-zinc-500 text-[10px]">Admin</p>
+                        </div>
                     </div>
-                    <div>
-                        <p className="text-white text-xs font-medium">Oğuz Atasoy</p>
-                        <p className="text-zinc-500 text-[10px]">Admin</p>
-                    </div>
+                    <button
+                        onClick={handleLogout}
+                        className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-colors"
+                        title="Se déconnecter"
+                    >
+                        <LogOut size={16} />
+                    </button>
                 </div>
             </div>
         </aside>
