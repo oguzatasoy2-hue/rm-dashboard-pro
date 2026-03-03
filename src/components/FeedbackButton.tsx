@@ -7,25 +7,47 @@ import { MessageSquare, X, Send, ThumbsUp, MessageCircle } from "lucide-react";
 export default function FeedbackButton() {
     const [isOpen, setIsOpen] = useState(false);
     const [feedback, setFeedback] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [isSent, setIsSent] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!feedback.trim()) return;
 
-        // We use mailto to send directly to user's email as requested
-        const subject = encodeURIComponent("[Feedback ORMpro] Avis & Conseils Recruteur");
-        const body = encodeURIComponent(feedback);
-        const mailtoUrl = `mailto:oguz.atasoy2@gmail.com?subject=${subject}&body=${body}`;
+        setIsLoading(true);
 
-        window.location.href = mailtoUrl;
+        try {
+            // Utilisation de Web3Forms (gratuit et sans backend) pour l'envoi invisible
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    access_key: "79177894-6869-482d-8874-913a48e71822", // Clé temporaire/démo ou à remplacer par la tienne
+                    message: feedback,
+                    subject: "[Feedback ORMpro] Avis & Conseils Recruteur",
+                    from_name: "Visiteur Portfolio",
+                    to_email: "oguz.atasoy2@gmail.com"
+                }),
+            });
 
-        setIsSent(true);
-        setTimeout(() => {
-            setIsSent(false);
-            setFeedback("");
-            setIsOpen(false);
-        }, 3000);
+            const result = await response.json();
+
+            if (result.success) {
+                setIsSent(true);
+                setTimeout(() => {
+                    setIsSent(false);
+                    setFeedback("");
+                    setIsOpen(false);
+                }, 3000);
+            }
+        } catch (error) {
+            console.error("Erreur d'envoi:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -82,10 +104,19 @@ export default function FeedbackButton() {
                                 />
                                 <button
                                     type="submit"
-                                    className="w-full flex items-center justify-center gap-2 bg-[#EAC54F] text-black font-bold py-2.5 rounded-xl hover:bg-[#D4B245] transition-all"
+                                    disabled={isLoading}
+                                    className="w-full flex items-center justify-center gap-2 bg-[#EAC54F] disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold py-2.5 rounded-xl hover:bg-[#D4B245] transition-all"
                                 >
-                                    <Send size={16} />
-                                    <span>Envoyer mon avis</span>
+                                    {isLoading ? (
+                                        <motion.div
+                                            animate={{ rotate: 360 }}
+                                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                            className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full"
+                                        />
+                                    ) : (
+                                        <Send size={16} />
+                                    )}
+                                    <span>{isLoading ? "Envoi en cours..." : "Envoyer mon avis"}</span>
                                 </button>
                             </form>
                         )}
