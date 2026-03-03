@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Settings, Save, MapPin, Building2, Key, Globe, Loader2, CheckCircle2 } from "lucide-react";
+import ModuleInfo from "@/components/ModuleInfo";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -59,6 +60,13 @@ export default function ConfigPage() {
                         </div>
                     </div>
                 </motion.div>
+
+                <ModuleInfo
+                    title="Configuration"
+                    utility="Personnalisation de l'intelligence métier et des paramètres système de l'outil."
+                    concrete="Réglages complets de votre environnement (CompSet, types de chambres, clés API externes)."
+                    usage="Mettez à jour vos listes de concurrents directs pour que les calculs de Yield restent pertinents par rapport à votre positionnement réel."
+                />
 
                 {/* Global Form Content */}
                 <motion.form variants={itemVariants} onSubmit={handleSave} className="space-y-8">

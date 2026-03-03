@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Activity, Search, AlertOctagon, TrendingDown, ArrowRight, Download, Loader2 } from "lucide-react";
+import ModuleInfo from "@/components/ModuleInfo";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -117,6 +118,13 @@ export default function ParityPage() {
                         </div>
                     </div>
                 </motion.div>
+
+                <ModuleInfo
+                    title="Rate Parity"
+                    utility="Protection de la marge bénéficiaire et du canal de vente direct."
+                    concrete="Détecte en temps réel si une OTA (Booking/Expedia) vend vos chambres moins cher que votre propre site."
+                    usage="En cas d'alerte rouge, contactez l'OTA ou ajustez votre Channel Manager pour restaurer la parité et éviter de payer des commissions inutiles."
+                />
 
                 {/* KPIs */}
                 <motion.div variants={itemVariants} className="grid grid-cols-3 gap-6">

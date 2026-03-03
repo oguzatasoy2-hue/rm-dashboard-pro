@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Copy, Check, Target, TrendingUp, AlertCircle, Loader2 } from "lucide-react";
+import ModuleInfo from "./ModuleInfo";
 
 // 1. ZOD TYPES MOcked
 type YieldPositioningData = {
@@ -150,6 +151,13 @@ export default function YieldDashboard() {
           </button>
         </div>
       </div>
+
+      <ModuleInfo
+        title="Yield & Positioning"
+        utility="Ajustement dynamique des prix en fonction de la demande et de la concurrence."
+        concrete="Visualise l'écart entre votre prix et celui du marché sur une fenêtre de 7 jours glissants."
+        usage="Analysez les jours où votre ADR est trop bas par rapport à la pression concurrentielle et utilisez les boutons 'Précédent/Suivant' pour explorer les périodes futures."
+      />
 
       {/* KPIs Layout avec Skeleton Loader */}
       <div className="grid grid-cols-2 gap-6 relative">

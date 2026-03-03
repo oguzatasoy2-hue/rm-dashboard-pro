@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { CloudRain, Search, Calendar, MapPin, Loader2 } from "lucide-react";
+import ModuleInfo from "@/components/ModuleInfo";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -129,6 +130,13 @@ export default function MarketInsightPage() {
                         </div>
                     </div>
                 </motion.div>
+
+                <ModuleInfo
+                    title="Market Insight"
+                    utility="Veille concurrentielle et détection d'opportunités par corrélation événementielle."
+                    concrete="Superpose les dates des grands événements (Salons, Festivals) aux volumes de recherche du marché."
+                    usage="Identifiez les pics de demande anticipés pour ouvrir vos restrictions de vente ou augmenter vos tarifs minimums lors des événements majeurs."
+                />
 
                 {/* Bento KPIs */}
                 <motion.div variants={itemVariants} className="grid grid-cols-3 gap-6">

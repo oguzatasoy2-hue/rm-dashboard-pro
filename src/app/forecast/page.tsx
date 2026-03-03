@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CalendarDays, ArrowUpRight, ArrowDownRight, Activity, TrendingUp, Download, Loader2 } from "lucide-react";
+import ModuleInfo from "@/components/ModuleInfo";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -99,6 +100,13 @@ export default function ForecastingPage() {
                         </div>
                     </div>
                 </motion.div>
+
+                <ModuleInfo
+                    title="Forecasting"
+                    utility="Modélisation prédictive de l'occupation et de la pression tarifaire future."
+                    concrete="Tableau de bord affichant les prévisions de demande (Velocity) basées sur vos rythmes de réservation actuels."
+                    usage="Anticipez les périodes de faible activité pour lancer des promotions ciblées avant que votre inventaire ne devienne périssable."
+                />
 
                 {/* Top KPIs Row */}
                 <motion.div variants={itemVariants} className="grid grid-cols-4 gap-4">

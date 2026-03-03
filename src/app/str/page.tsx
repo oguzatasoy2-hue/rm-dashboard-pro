@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { BarChart3, TrendingUp, TrendingDown, Crosshair, Award, Loader2, Download } from "lucide-react";
+import ModuleInfo from "@/components/ModuleInfo";
 
 // Linear/Vercel smooth acceleration curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -107,6 +108,13 @@ export default function STRBenchmarkPage() {
                         </div>
                     </div>
                 </motion.div>
+
+                <ModuleInfo
+                    title="STR Benchmark"
+                    utility="Analyse de la performance relative face au marché (Indices MPI, ARI, RGI)."
+                    concrete="Graphique Radar comparant votre établissement au 'CompSet' sur trois axes : Occupation, Prix et Revenu."
+                    usage="Un indice < 1.00 signifie que vous sous-performez. Utilisez ce graphique pour identifier si votre point faible est le remplissage (MPI) ou le prix moyen (ARI)."
+                />
 
                 {/* Top Indices */}
                 <motion.div variants={itemVariants} className="grid grid-cols-3 gap-6">
