@@ -9,15 +9,16 @@ export default function FeedbackButton() {
     const [feedback, setFeedback] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isSent, setIsSent] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!feedback.trim()) return;
 
         setIsLoading(true);
+        setError(null);
 
         try {
-            // Utilisation de Web3Forms (gratuit et sans backend) pour l'envoi invisible
             const response = await fetch("https://api.web3forms.com/submit", {
                 method: "POST",
                 headers: {
@@ -25,11 +26,10 @@ export default function FeedbackButton() {
                     Accept: "application/json",
                 },
                 body: JSON.stringify({
-                    access_key: "79177894-6869-482d-8874-913a48e71822", // Clé temporaire/démo ou à remplacer par la tienne
+                    access_key: "79177894-6869-482d-8874-913a48e71822",
                     message: feedback,
                     subject: "[Feedback ORMpro] Avis & Conseils Recruteur",
                     from_name: "Visiteur Portfolio",
-                    to_email: "oguz.atasoy2@gmail.com"
                 }),
             });
 
@@ -42,8 +42,11 @@ export default function FeedbackButton() {
                     setFeedback("");
                     setIsOpen(false);
                 }, 3000);
+            } else {
+                setError(result.message || "Erreur lors de l'envoi.");
             }
         } catch (error) {
+            setError("Erreur réseau. Vérifiez votre connexion.");
             console.error("Erreur d'envoi:", error);
         } finally {
             setIsLoading(false);
@@ -102,6 +105,17 @@ export default function FeedbackButton() {
                                     className="w-full h-32 bg-white/[0.03] border border-white/[0.08] rounded-xl p-3 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-[#EAC54F]/50 transition-all resize-none"
                                     required
                                 />
+
+                                {error && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] flex items-center gap-2"
+                                    >
+                                        <X size={14} className="flex-shrink-0" />
+                                        <span>{error}</span>
+                                    </motion.div>
+                                )}
                                 <button
                                     type="submit"
                                     disabled={isLoading}
