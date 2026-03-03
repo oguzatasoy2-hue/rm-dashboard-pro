@@ -11,7 +11,7 @@ const strictEase = [0.16, 1, 0.3, 1] as const;
 export default function LoginPage() {
     const router = useRouter();
     const [email, setEmail] = useState("admin@ormpro.com");
-    const [password, setPassword] = useState("admin123");
+    const [password, setPassword] = useState("ORMpro_Secure_2026");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleLogin = (e: React.FormEvent) => {
