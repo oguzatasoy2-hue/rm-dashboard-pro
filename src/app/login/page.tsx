@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Loader2, KeyRound } from "lucide-react";
+import { LogoORM } from "@/components/LogoORM";
 
 // Linear/Vercel smooth acceleration curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -63,8 +64,8 @@ export default function LoginPage() {
                         transition={{ delay: 0.2, duration: 0.6, ease: strictEase }}
                         className="flex flex-col items-center mb-10"
                     >
-                        <div className="w-12 h-12 rounded-xl bg-primary shadow-[0_0_30px_var(--primary)] flex items-center justify-center mb-6">
-                            <span className="text-[#09090B] font-bold text-lg tracking-tighter">ORM</span>
+                        <div className="mb-8">
+                            <LogoORM />
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 mb-4">
                             <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
