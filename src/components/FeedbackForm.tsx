@@ -116,8 +116,8 @@ export default function FeedbackForm({ isOpen, onClose }: FeedbackFormProps) {
                                                         type="button"
                                                         onClick={() => setFeedbackType(type)}
                                                         className={`py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border transition-all ${feedbackType === type
-                                                                ? 'bg-primary/10 border-primary text-primary'
-                                                                : 'bg-white/[0.02] border-white/[0.05] text-zinc-500 hover:border-white/20'
+                                                            ? 'bg-primary/10 border-primary text-primary'
+                                                            : 'bg-white/[0.02] border-white/[0.05] text-zinc-500 hover:border-white/20'
                                                             }`}
                                                     >
                                                         {type}
@@ -128,23 +128,12 @@ export default function FeedbackForm({ isOpen, onClose }: FeedbackFormProps) {
                                         </div>
 
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-1">Your Email</label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                required
-                                                placeholder="name@company.com"
-                                                className="w-full bg-white/[0.02] border border-white/[0.08] rounded-2xl px-5 py-3 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
-                                            />
-                                        </div>
-
-                                        <div className="space-y-2">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-1">Message</label>
                                             <textarea
                                                 name="message"
                                                 required
-                                                rows={4}
-                                                placeholder="Tell us what's on your mind..."
+                                                rows={5}
+                                                placeholder="Tell us what's on your mind... (anonymous)"
                                                 className="w-full bg-white/[0.02] border border-white/[0.08] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all resize-none"
                                             />
                                         </div>

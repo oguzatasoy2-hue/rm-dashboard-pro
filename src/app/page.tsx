@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { LogoORM } from '@/components/LogoORM';
-import FeedbackForm from '@/components/FeedbackForm';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -124,7 +123,6 @@ const PRICING = [
 export default function Home() {
   const [activeModule, setActiveModule] = useState(0);
   const mod = MODULES[activeModule];
-  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#09090B] text-white overflow-x-hidden relative">
@@ -798,12 +796,6 @@ export default function Home() {
             <div className="flex flex-col gap-3">
               <h4 className="text-white font-semibold mb-2">Company</h4>
               <a href="#" className="text-sm text-zinc-500 hover:text-white transition-colors">About Us</a>
-              <button
-                onClick={() => setIsFeedbackOpen(true)}
-                className="text-sm text-zinc-500 hover:text-white transition-colors text-left"
-              >
-                Give your feedback
-              </button>
               <a href="#" className="text-sm text-zinc-500 hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="text-sm text-zinc-500 hover:text-white transition-colors">Terms of Service</a>
             </div>
@@ -815,8 +807,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      <FeedbackForm isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
     </div>
   );
 }
