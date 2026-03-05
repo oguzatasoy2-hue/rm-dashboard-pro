@@ -11,7 +11,7 @@ import { siteConfig } from "@/config/site";
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
 const NAV_ITEMS = [
-    { name: siteConfig.moduleNames.yield, href: "/", icon: Target },
+    { name: siteConfig.moduleNames.yield, href: "/dashboard", icon: Target },
     { name: siteConfig.moduleNames.market, href: "/market", icon: LineChart },
     { name: siteConfig.moduleNames.forecast, href: "/forecast", icon: CalendarDays },
     { name: siteConfig.moduleNames.parity, href: "/parity", icon: Activity },
