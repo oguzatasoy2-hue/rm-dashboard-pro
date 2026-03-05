@@ -24,7 +24,7 @@ export default function LoginPage() {
         setTimeout(() => {
             // Set simple cookie to bypass middleware for prototype
             document.cookie = "rm_pro_session=authenticated; path=/; max-age=86400";
-            router.push("/");
+            router.push("/dashboard");
         }, 1500);
     };
 
