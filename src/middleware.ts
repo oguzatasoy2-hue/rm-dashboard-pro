@@ -6,15 +6,17 @@ export function middleware(request: NextRequest) {
     // For the portfolio showcase, we simulate the logic by checking a mock cookie.
     const hasAuthToken = request.cookies.has('rm_pro_session');
 
-    // If the user is trying to access any page other than /login and doesn't have the token
-    if (!hasAuthToken && request.nextUrl.pathname !== '/login') {
+    // If the user is trying to access protected pages without a token
+    const isPublicPath = request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/landing' || request.nextUrl.pathname === '/';
+
+    if (!hasAuthToken && !isPublicPath) {
         // Redirect them to the /login page
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
     // If they are on the login page but ALREADY have a token, send them to the dashboard
     if (hasAuthToken && request.nextUrl.pathname === '/login') {
-        return NextResponse.redirect(new URL('/', request.url));
+        return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
     // Otherwise, allow the request to proceed as normal
