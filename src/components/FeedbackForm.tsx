@@ -19,8 +19,8 @@ export default function FeedbackForm({ isOpen, onClose }: FeedbackFormProps) {
         setIsSubmitting(true);
 
         const formData = new FormData(e.currentTarget);
-        // Replace this with your actual Web3Forms Access Key
-        formData.append("access_key", "YOUR_WEB3FORMS_ACCESS_KEY_HERE");
+        // Web3Forms Access Key
+        formData.append("access_key", "1197bda5-e7e0-4a60-b8ab-a9203ab3b89f");
 
         try {
             const response = await fetch("https://api.web3forms.com/submit", {
