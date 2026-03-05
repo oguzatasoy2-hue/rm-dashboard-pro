@@ -77,27 +77,16 @@ export const LogoORM = () => {
                 </svg>
             </div>
 
-            {/* Logotype Branding - Optimisé UI/UX (Clarté & Hiérarchie) */}
-            <div className="flex flex-col justify-center leading-tight">
-                <div className="flex items-baseline">
-                    {/* RM : Majuscules pour l'autorité */}
-                    <span className="text-4xl font-bold tracking-tighter text-white">
-                        RM
-                    </span>
-                    {/* pro : Minuscules élégantes pour le côté service/accompagnement */}
-                    <span className="text-4xl font-light tracking-tight text-[#EAC54F] ml-1 opacity-90">
-                        pro
-                    </span>
-                </div>
-
-                {/* Tagline Blueprint Style */}
-                <div className="flex items-center gap-2 mt-1">
-                    <div className="h-[1px] flex-1 bg-white/10 min-w-[12px]"></div>
-                    <span className="text-[10px] font-medium uppercase tracking-[0.35em] text-white/40 whitespace-nowrap">
-                        Revenue Intel
-                    </span>
-                    <div className="h-[1px] w-2 bg-[#EAC54F]/30"></div>
-                </div>
+            {/* Logotype Branding - Optimisé UI/UX (Poppins Geometric) */}
+            <div className="flex items-baseline leading-none">
+                {/* RM : Bold pour l'autorité */}
+                <span className="text-[32px] font-bold tracking-tighter text-white font-[family-name:var(--font-poppins)]">
+                    RM
+                </span>
+                {/* pro : Medium pour l'élégance technique */}
+                <span className="text-[32px] font-medium tracking-tight text-[#EAC54F] ml-0.5 opacity-90 font-[family-name:var(--font-poppins)]">
+                    pro
+                </span>
             </div>
 
         </div>
