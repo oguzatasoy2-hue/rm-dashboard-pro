@@ -79,12 +79,16 @@ export const LogoORM = () => {
 
             {/* Logotype Branding - Optimisé UI/UX (Poppins Geometric) */}
             <div className="flex items-baseline leading-none">
+                {/* O : Accent élégant */}
+                <span className="text-[32px] font-light tracking-tighter text-[#EAC54F] font-[family-name:var(--font-poppins)] mr-0.5">
+                    O
+                </span>
                 {/* RM : Bold pour l'autorité */}
                 <span className="text-[32px] font-bold tracking-tighter text-white font-[family-name:var(--font-poppins)]">
                     RM
                 </span>
-                {/* pro : Medium pour l'élégance technique */}
-                <span className="text-[32px] font-medium tracking-tight text-[#EAC54F] ml-0.5 opacity-90 font-[family-name:var(--font-poppins)]">
+                {/* pro : Épuré & Minimaliste */}
+                <span className="text-[18px] font-light tracking-[0.05em] text-[#EAC54F]/90 ml-1.5 font-[family-name:var(--font-poppins)]">
                     pro
                 </span>
             </div>
