@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: var(--primary);
+}
+
 :root {
   --background: #09090B;
   --foreground: #FFFFFF;
+  --primary: #EAC54F;
+  --primary-foreground: #09090B;
+  --muted: #FFFFFF05;
+  --muted-foreground: #A1A1AA;
+  --border: #FFFFFF0D;
 }
 
 body {

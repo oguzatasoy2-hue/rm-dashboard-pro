@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { CloudRain, Search, Calendar, MapPin, Loader2 } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
+import { generateMarketData } from "@/data/mock";
+import { siteConfig } from "@/config/site";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -22,78 +24,59 @@ const itemVariants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: strictEase } }
 };
 
-// Mockup Data replicating the python random generator logic for Market Insight
-const generateMockData = () => {
-    const data = [];
-    const startDay = new Date();
-    for (let i = 0; i < 14; i++) {
-        const current = new Date(startDay);
-        current.setDate(startDay.getDate() + i);
-        const dateStr = current.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+interface CustomTooltipProps {
+    active?: boolean;
+    payload?: any[];
+    label?: string;
+}
 
-        // Simulate event spike around day 6
-        const isEvent = i === 6;
-        const baseDemand = 40 + Math.random() * 20;
-        const baseSearch = 50 + Math.random() * 25;
-
-        data.push({
-            date: dateStr,
-            searchVolume: isEvent ? 95 : Math.floor(baseSearch),
-            marketDemand: isEvent ? 85 : Math.floor(baseDemand),
-            hasEvent: isEvent,
-            eventName: isEvent ? "Bordeaux Wine Fest" : null,
-        });
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+    if (active && payload && payload.length) {
+        const dataPoint = payload[0].payload;
+        return (
+            <div className="bg-[#09090B] border border-white/10 p-4 rounded-xl shadow-2xl backdrop-blur-md min-w-[200px]">
+                <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
+                    <p className="text-white text-xs font-semibold tabular-nums">{label}</p>
+                    {dataPoint.hasEvent && (
+                        <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-sm">
+                            <MapPin size={10} /> Event
+                        </span>
+                    )}
+                </div>
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between gap-6">
+                        <div className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
+                            <span className="text-zinc-400 text-xs font-medium">{siteConfig.kpis.marketSearch}</span>
+                        </div>
+                        <span className="text-white font-semibold tabular-nums">{payload[0]?.value}/100</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-6">
+                        <div className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                            <span className="text-primary text-xs font-medium">{siteConfig.kpis.marketDemand}</span>
+                        </div>
+                        <span className="text-primary font-semibold tabular-nums">{payload[1]?.value}/100</span>
+                    </div>
+                </div>
+            </div>
+        );
     }
-    return data;
+    return null;
 };
 
 export default function MarketInsightPage() {
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<any[]>([]); // Keeping any[] for simplicity in mock data for now, but fixing the others
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         // Simulate network delay
         const timer = setTimeout(() => {
-            setData(generateMockData());
+            setData(generateMarketData());
             setIsLoading(false);
         }, 1000);
         return () => clearTimeout(timer);
     }, []);
-
-    const CustomTooltip = ({ active, payload, label }: any) => {
-        if (active && payload && payload.length) {
-            const dataPoint = payload[0].payload;
-            return (
-                <div className="bg-[#09090B] border border-white/10 p-4 rounded-xl shadow-2xl backdrop-blur-md min-w-[200px]">
-                    <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
-                        <p className="text-white text-xs font-semibold tabular-nums">{label}</p>
-                        {dataPoint.hasEvent && (
-                            <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#EAC54F] bg-[#EAC54F]/10 px-2 py-0.5 rounded-sm">
-                                <MapPin size={10} /> Event
-                            </span>
-                        )}
-                    </div>
-                    <div className="space-y-2">
-                        <div className="flex items-center justify-between gap-6">
-                            <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
-                                <span className="text-zinc-400 text-xs font-medium">Search Vol.</span>
-                            </div>
-                            <span className="text-white font-semibold tabular-nums">{payload[0]?.value}/100</span>
-                        </div>
-                        <div className="flex items-center justify-between gap-6">
-                            <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#EAC54F]"></span>
-                                <span className="text-[#EAC54F] text-xs font-medium">Flight Demand</span>
-                            </div>
-                            <span className="text-[#EAC54F] font-semibold tabular-nums">{payload[1]?.value}/100</span>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-        return null;
-    };
 
     if (isLoading) {
         return (
@@ -119,7 +102,7 @@ export default function MarketInsightPage() {
                 <motion.div variants={itemVariants}>
                     <div className="flex items-end justify-between">
                         <div>
-                            <h1 className="text-3xl font-semibold text-white tracking-tight mb-2">Market Insight</h1>
+                            <h1 className="text-3xl font-semibold text-white tracking-tight mb-2">{siteConfig.moduleNames.market}</h1>
                             <p className="text-zinc-500 text-sm">Forward-looking search volume & flight demand indexing.</p>
                         </div>
                         <div className="flex items-center gap-3">
@@ -132,17 +115,16 @@ export default function MarketInsightPage() {
                 </motion.div>
 
                 <ModuleInfo
-                    title="Market Insight"
-                    utility="Veille concurrentielle et détection d'opportunités par corrélation événementielle."
-                    concrete="Superpose les dates des grands événements (Salons, Festivals) aux volumes de recherche du marché."
-                    usage="Identifiez les pics de demande anticipés pour ouvrir vos restrictions de vente ou augmenter vos tarifs minimums lors des événements majeurs."
+                    utility="Competitive intelligence and opportunity detection through event correlation."
+                    concrete="Overlays dates of major events (Trade Shows, Festivals) onto market search volumes."
+                    usage="Identify anticipated demand peaks to open your sales restrictions or raise minimum rates during major events."
                 />
 
                 {/* Bento KPIs */}
                 <motion.div variants={itemVariants} className="grid grid-cols-3 gap-6">
                     <div className="bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl hover:bg-white/[0.03] hover:-translate-y-1 transition-all duration-300">
                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Global Search Trend</span>
+                            <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Global {siteConfig.kpis.marketSearch} Trend</span>
                             <Search size={14} className="text-zinc-400" />
                         </div>
                         <div className="flex items-baseline gap-2">
@@ -155,13 +137,13 @@ export default function MarketInsightPage() {
                     <div className="bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl hover:bg-white/[0.03] hover:-translate-y-1 transition-all duration-300">
                         <div className="flex items-center justify-between mb-4">
                             <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Peak Market Date</span>
-                            <Calendar size={14} className="text-[#EAC54F]" />
+                            <Calendar size={14} className="text-primary" />
                         </div>
                         <div className="flex items-baseline gap-2">
                             <span className="text-4xl font-semibold text-white tracking-tighter">14</span>
                             <span className="text-sm font-medium text-zinc-500">Mar</span>
                         </div>
-                        <p className="text-xs text-[#EAC54F] mt-2 font-medium bg-[#EAC54F]/10 w-fit px-1.5 py-0.5 rounded">Major Event Detected</p>
+                        <p className="text-xs text-primary mt-2 font-medium bg-primary/10 w-fit px-1.5 py-0.5 rounded">Major Event Detected</p>
                     </div>
 
                     <div className="bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl hover:bg-white/[0.03] hover:-translate-y-1 transition-all duration-300">
@@ -182,15 +164,15 @@ export default function MarketInsightPage() {
                     <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent rounded-3xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
 
                     <div className="mb-8 flex justify-between items-center px-2">
-                        <h3 className="text-sm font-semibold text-zinc-300 tracking-wide">Search vs Flight Demand Alignment</h3>
+                        <h3 className="text-sm font-semibold text-zinc-300 tracking-wide">{siteConfig.kpis.marketSearch} vs {siteConfig.kpis.marketDemand} Alignment</h3>
                         <div className="flex gap-4">
                             <div className="flex items-center gap-2">
                                 <div className="w-2 h-0.5 bg-white"></div>
-                                <span className="text-xs font-medium text-zinc-400">Search Volume</span>
+                                <span className="text-xs font-medium text-zinc-400">{siteConfig.kpis.marketSearch}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-2 h-0.5 bg-[#EAC54F]"></div>
-                                <span className="text-xs font-medium text-zinc-400">Flight Demand</span>
+                                <div className="w-2 h-0.5 bg-primary"></div>
+                                <span className="text-xs font-medium text-zinc-400">{siteConfig.kpis.marketDemand}</span>
                             </div>
                         </div>
                     </div>
@@ -215,7 +197,7 @@ export default function MarketInsightPage() {
                                 />
                                 <Tooltip
                                     content={<CustomTooltip />}
-                                    cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1 }}
+                                    cursor={{ stroke: 'var(--primary)', strokeWidth: 1, strokeDasharray: '4 4' }}
                                 />
 
                                 <Line
@@ -229,19 +211,19 @@ export default function MarketInsightPage() {
                                 <Line
                                     type="monotone"
                                     dataKey="marketDemand"
-                                    stroke="#EAC54F"
+                                    stroke="var(--primary)"
                                     strokeWidth={2.5}
                                     dot={(props: any) => {
                                         // Only draw a dot where there is an event
                                         const { cx, cy, payload } = props;
                                         if (payload.hasEvent) {
                                             return (
-                                                <circle cx={cx} cy={cy} r={6} fill="#EAC54F" stroke="#09090B" strokeWidth={2} style={{ filter: 'drop-shadow(0 0 10px rgba(234,197,79,0.8))' }} />
+                                                <circle cx={cx} cy={cy} r={6} fill="var(--primary)" stroke="#09090B" strokeWidth={2} style={{ filter: 'drop-shadow(0 0 10px var(--primary))' }} />
                                             );
                                         }
                                         return <></>;
                                     }}
-                                    activeDot={{ r: 5, fill: '#EAC54F', stroke: '#09090B', strokeWidth: 2 }}
+                                    activeDot={{ r: 5, fill: 'var(--primary)', stroke: '#09090B', strokeWidth: 2 }}
                                 />
                             </LineChart>
                         </ResponsiveContainer>

@@ -3,99 +3,29 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { Copy, Check, Target, TrendingUp, AlertCircle, Loader2 } from "lucide-react";
+import { Download, ChevronLeft, ChevronRight, Loader2, Calendar, LayoutGrid, List } from 'lucide-react';
 import ModuleInfo from "./ModuleInfo";
-
-// 1. ZOD TYPES MOcked
-type YieldPositioningData = {
-  currentHotelAdr: number;
-  currentCompSetAdr: number;
-  currency: "€";
-  chartData: {
-    timestamp: string;
-    hotelPrice: number;
-    compSetAvgPrice: number;
-  }[];
-};
-
-const MOCK_DATA: YieldPositioningData = {
-  currentHotelAdr: 154,
-  currentCompSetAdr: 141,
-  currency: '€',
-  chartData: [
-    { timestamp: '01 Mar', hotelPrice: 135, compSetAvgPrice: 140 },
-    { timestamp: '02 Mar', hotelPrice: 138, compSetAvgPrice: 142 },
-    { timestamp: '03 Mar', hotelPrice: 145, compSetAvgPrice: 141 },
-    { timestamp: '04 Mar', hotelPrice: 154, compSetAvgPrice: 141 },
-    { timestamp: '05 Mar', hotelPrice: 150, compSetAvgPrice: 143 },
-    { timestamp: '06 Mar', hotelPrice: 148, compSetAvgPrice: 145 },
-    { timestamp: '07 Mar', hotelPrice: 152, compSetAvgPrice: 148 },
-  ]
-};
-
-const generateMockData = (offsetWeeks: number): YieldPositioningData => {
-  const baseAdr = 154 + (offsetWeeks * 12); // Price goes up in the future
-  const compAdr = 141 + (offsetWeeks * 8); // Compset goes up slower
-
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() + (offsetWeeks * 7));
-
-  const chartData = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(startDate);
-    d.setDate(startDate.getDate() + i);
-    const dateStr = d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
-
-    // Add some random noise
-    chartData.push({
-      timestamp: dateStr,
-      hotelPrice: baseAdr + (Math.floor(Math.random() * 20) - 10),
-      compSetAvgPrice: compAdr + (Math.floor(Math.random() * 15) - 7),
-    });
-  }
-
-  return {
-    currentHotelAdr: baseAdr,
-    currentCompSetAdr: compAdr,
-    currency: '€',
-    chartData
-  };
-};
+import { generateMockYieldData, type YieldPositioningData } from "@/data/mock";
+import { siteConfig } from "@/config/site";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: strictEase } }
-};
 
 export default function YieldDashboard() {
-  const [isCopied, setIsCopied] = useState(false);
   const [weekOffset, setWeekOffset] = useState(0);
   const [data, setData] = useState<YieldPositioningData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
     // Simulate API fetch on pagination change
     const timer = setTimeout(() => {
-      setData(generateMockData(weekOffset));
+      setData(generateMockYieldData(weekOffset));
       setIsLoading(false);
     }, 600);
     return () => clearTimeout(timer);
   }, [weekOffset]);
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
-  };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -105,8 +35,8 @@ export default function YieldDashboard() {
           <div className="space-y-1.5">
             <div className="flex items-center justify-between gap-6">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#EAC54F] shadow-[0_0_8px_rgba(234,197,79,0.5)]"></span>
-                <span className="text-white text-xs font-medium">Notre Hôtel</span>
+                <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]"></span>
+                <span className="text-white text-xs font-medium">Our Hotel</span>
               </div>
               <span className="text-white font-semibold tabular-nums">{payload[1]?.value} €</span>
             </div>
@@ -130,39 +60,38 @@ export default function YieldDashboard() {
       {/* Header & Controls Premium */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">Yield & Positioning</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-white">{siteConfig.moduleNames.yield}</h1>
           <p className="text-sm text-zinc-500 mt-1">Analyse de la pression concurrentielle sur 7 jours.</p>
         </div>
 
-        {/* Boutons d'ingénierie (Styled) */}
+        {/* Navigation Buttons */}
         <div className="flex items-center gap-2 p-1 bg-white/[0.03] border border-white/[0.08] rounded-lg">
           <button
             onClick={() => setWeekOffset(w => w - 1)}
             className="px-3 py-1.5 text-xs font-medium rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-all"
           >
-            ← Précédent
+            ← Previous
           </button>
           <div className="w-[1px] h-4 bg-white/[0.08]"></div>
           <button
             onClick={() => setWeekOffset(w => w + 1)}
             className="px-3 py-1.5 text-xs font-medium rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-all"
           >
-            Suivant →
+            Next →
           </button>
         </div>
       </div>
 
       <ModuleInfo
-        title="Yield & Positioning"
-        utility="Ajustement dynamique des prix en fonction de la demande et de la concurrence."
-        concrete="Visualise l'écart entre votre prix et celui du marché sur une fenêtre de 7 jours glissants."
-        usage="Analysez les jours où votre ADR est trop bas par rapport à la pression concurrentielle et utilisez les boutons 'Précédent/Suivant' pour explorer les périodes futures."
+        utility="Dynamic pricing adjustments based on market demand and competition."
+        concrete="Visualizes the gap between your price and the market over a rolling 7-day window."
+        usage="Analyze days where your pricing strategy underperforms relative to market pressure. Use 'Previous/Next' to explore future periods."
       />
 
       {/* KPIs Layout avec Skeleton Loader */}
       <div className="grid grid-cols-2 gap-6 relative">
         <div className="bg-[#FFFFFF]/[0.02] border border-white/[0.08] rounded-xl p-6 transition-all hover:bg-white/[0.04]">
-          <p className="text-zinc-400 text-xs uppercase tracking-[0.05em] font-medium mb-3">Notre ADR (Base)</p>
+          <p className="text-zinc-400 text-xs uppercase tracking-[0.05em] font-medium mb-3">{siteConfig.kpis.yieldVal1}</p>
           <div className="flex items-baseline gap-1 h-12">
             {isLoading ? (
               <div className="w-24 h-10 bg-white/[0.05] rounded-md animate-pulse"></div>
@@ -176,7 +105,7 @@ export default function YieldDashboard() {
         </div>
 
         <div className="bg-[#FFFFFF]/[0.02] border border-white/[0.08] rounded-xl p-6 transition-all hover:bg-white/[0.04]">
-          <p className="text-zinc-400 text-xs uppercase tracking-[0.05em] font-medium mb-3">Marché Médian (Compset)</p>
+          <p className="text-zinc-400 text-xs uppercase tracking-[0.05em] font-medium mb-3">{siteConfig.kpis.yieldVal2}</p>
           <div className="flex items-baseline gap-1 h-12">
             {isLoading ? (
               <div className="w-24 h-10 bg-white/[0.05] rounded-md animate-pulse"></div>
@@ -206,11 +135,11 @@ export default function YieldDashboard() {
               {/* Custom Tooltip Dark Mode */}
               <Tooltip
                 contentStyle={{ backgroundColor: '#18181B', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff', fontSize: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}
-                itemStyle={{ color: '#EAC54F', fontWeight: 600 }}
+                itemStyle={{ color: 'var(--primary)', fontWeight: 600 }}
               />
 
-              <Line type="monotone" name="Marché (€)" dataKey="compSetAvgPrice" stroke="#71717A" strokeWidth={2} strokeDasharray="4 4" dot={{ fill: '#09090B', r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-              <Line type="monotone" name="Oğuz ADR (€)" dataKey="hotelPrice" stroke="#EAC54F" strokeWidth={2} dot={{ fill: '#09090B', r: 4, strokeWidth: 2 }} activeDot={{ r: 6, stroke: '#EAC54F', strokeWidth: 2, fill: '#09090B' }} />
+              <Line type="monotone" name={siteConfig.kpis.chartLine2} dataKey="compSetAvgPrice" stroke="#71717A" strokeWidth={2} strokeDasharray="4 4" dot={{ fill: '#09090B', r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+              <Line type="monotone" name={siteConfig.kpis.chartLine1} dataKey="hotelPrice" stroke="var(--primary)" strokeWidth={2} dot={{ fill: '#09090B', r: 4, strokeWidth: 2 }} activeDot={{ r: 6, stroke: 'var(--primary)', strokeWidth: 2, fill: '#09090B' }} />
             </LineChart>
           </ResponsiveContainer>
         )}

@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { CalendarDays, ArrowUpRight, ArrowDownRight, Activity, TrendingUp, Download, Loader2 } from "lucide-react";
+import { Download, Loader2, CalendarDays, Activity, TrendingUp, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
+import { generateForecastingData, type ForecastData } from "@/data/mock";
+import { siteConfig } from "@/config/site";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -21,40 +23,8 @@ const itemVariants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: strictEase } }
 };
 
-// Mockup Data replicating the python generator logic for Forecasting
-const generateForecastingData = () => {
-    const data = [];
-    const startDay = new Date();
-    for (let i = 0; i < 30; i++) {
-        const current = new Date(startDay);
-        current.setDate(startDay.getDate() + i);
-        const dateStr = current.toLocaleDateString("en-GB", { weekday: 'short', day: "2-digit", month: "short" });
-
-        // Core logic mockup
-        const isWeekend = [0, 6].includes(current.getDay());
-        const baseOcc = isWeekend ? 0.85 : 0.60;
-        const occ = Math.min(1.0, baseOcc + (Math.random() * 0.2 - 0.1));
-        const price = isWeekend ? 175 + (Math.random() * 20) : 135 + (Math.random() * 10);
-        const pace = Math.floor(Math.random() * 15) - 5; // -5 to +10
-        const wtp = price * (1 + (Math.random() * 0.15)); // Willingness to pay is slightly higher
-
-        data.push({
-            date: dateStr,
-            isWeekend,
-            occupancy: (occ * 100).toFixed(1),
-            roomsSold: Math.floor(50 * occ), // Assuming 50 rooms total
-            price: price.toFixed(0),
-            wtp: wtp.toFixed(0),
-            pace: pace,
-            demand: pace > 5 ? 'High' : pace < 0 ? 'Low' : 'Normal',
-            event: (i === 12 || i === 13) ? "Regional Fest" : null,
-        });
-    }
-    return data;
-};
-
 export default function ForecastingPage() {
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<ForecastData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -89,7 +59,7 @@ export default function ForecastingPage() {
                 <motion.div variants={itemVariants}>
                     <div className="flex items-end justify-between">
                         <div>
-                            <h1 className="text-3xl font-semibold text-white tracking-tight mb-2">Demand Forecasting</h1>
+                            <h1 className="text-3xl font-semibold text-white tracking-tight mb-2">{siteConfig.moduleNames.forecast}</h1>
                             <p className="text-zinc-500 text-sm">30-day algorithmic pace and price elasticity matrix.</p>
                         </div>
                         <div className="flex items-center gap-3">
@@ -102,10 +72,9 @@ export default function ForecastingPage() {
                 </motion.div>
 
                 <ModuleInfo
-                    title="Forecasting"
-                    utility="Modélisation prédictive de l'occupation et de la pression tarifaire future."
-                    concrete="Tableau de bord affichant les prévisions de demande (Velocity) basées sur vos rythmes de réservation actuels."
-                    usage="Anticipez les périodes de faible activité pour lancer des promotions ciblées avant que votre inventaire ne devienne périssable."
+                    utility="Predictive modeling of future occupancy and rate pressure."
+                    concrete="Dashboard showing demand forecasts (Velocity) based on your current booking pace."
+                    usage="Anticipate low-activity periods to launch targeted promotions before your inventory becomes perishable."
                 />
 
                 {/* Top KPIs Row */}
@@ -139,10 +108,10 @@ export default function ForecastingPage() {
                     {/* Table Header */}
                     <div className="grid grid-cols-8 gap-4 px-6 py-4 border-b border-white/[0.05] bg-[#09090B]/50">
                         <div className="col-span-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Date</div>
-                        <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 text-right">Occ %</div>
-                        <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 text-right">Selling Price</div>
-                        <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 text-right">Willingness To Pay</div>
-                        <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 text-right">Pace Vel.</div>
+                        <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 text-right">{siteConfig.kpis.forecastRooms}</div>
+                        <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 text-right">Target Value</div>
+                        <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 text-right">Max Ceiling</div>
+                        <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 text-right">{siteConfig.kpis.forecastPace}</div>
                         <div className="col-span-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500 pl-8">Market Signal</div>
                     </div>
 
@@ -151,7 +120,7 @@ export default function ForecastingPage() {
                         {data.map((row, idx) => (
                             <div
                                 key={idx}
-                                className={`grid grid-cols-8 gap-4 px-6 py-3.5 items-center transition-colors hover:bg-white/[0.02] group ${row.isWeekend ? 'bg-[#EAC54F]/[0.01]' : ''}`}
+                                className={`grid grid-cols-8 gap-4 px-6 py-3.5 items-center transition-colors hover:bg-white/[0.02] group ${row.isWeekend ? 'bg-primary/[0.01]' : ''}`}
                             >
 
                                 {/* Date & Event Bubble */}
@@ -160,7 +129,7 @@ export default function ForecastingPage() {
                                         {row.date}
                                     </span>
                                     {row.event && (
-                                        <span className="text-[9px] font-bold uppercase tracking-wider text-[#EAC54F] bg-[#EAC54F]/10 px-1.5 py-0.5 rounded border border-[#EAC54F]/20">
+                                        <span className="text-[9px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1.5 py-0.5 rounded border border-primary/20">
                                             {row.event}
                                         </span>
                                     )}
@@ -173,7 +142,7 @@ export default function ForecastingPage() {
                                             className="h-full rounded-full transition-all duration-1000"
                                             style={{
                                                 width: `${row.occupancy}%`,
-                                                backgroundColor: row.occupancy > 80 ? '#4ade80' : row.occupancy > 50 ? '#EAC54F' : '#a1a1aa'
+                                                backgroundColor: row.occupancy > 80 ? '#4ade80' : row.occupancy > 50 ? 'var(--primary)' : '#a1a1aa'
                                             }}
                                         />
                                     </div>
@@ -185,13 +154,13 @@ export default function ForecastingPage() {
                                 {/* Current Price */}
                                 <div className="flex justify-end pr-2">
                                     <div className="text-sm font-semibold text-white tabular-nums bg-white/[0.05] px-2 py-0.5 rounded border border-white/[0.05] group-hover:border-white/20 transition-colors">
-                                        {row.price} €
+                                        {row.price} {siteConfig.kpis.currency}
                                     </div>
                                 </div>
 
                                 {/* Algorithmic WTP */}
                                 <div className="text-sm font-medium text-zinc-400 tabular-nums text-right pr-4">
-                                    {row.wtp} €
+                                    {row.wtp} {siteConfig.kpis.currency}
                                 </div>
 
                                 {/* Pace Velocity */}
@@ -211,7 +180,7 @@ export default function ForecastingPage() {
                                 {/* Market Signal */}
                                 <div className="col-span-2 pl-8 flex items-center">
                                     <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-sm
-                    ${row.demand === 'High' ? 'bg-[#EAC54F]/10 text-[#EAC54F] border border-[#EAC54F]/20' :
+                    ${row.demand === 'High' ? 'bg-primary/10 text-primary border border-primary/20' :
                                             row.demand === 'Low' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
                                                 'bg-white/5 text-zinc-400 border border-white/5'}
                   `}>

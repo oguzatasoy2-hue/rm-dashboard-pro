@@ -6,15 +6,16 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Target, LineChart, CalendarDays, Settings, Activity, PieChart, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { siteConfig } from "@/config/site";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
 const NAV_ITEMS = [
-    { name: "Yield & Positioning", href: "/", icon: Target },
-    { name: "Market Insight", href: "/market", icon: LineChart },
-    { name: "Forecasting", href: "/forecast", icon: CalendarDays },
-    { name: "Rate Parity", href: "/parity", icon: Activity },
-    { name: "STR Benchmark", href: "/str", icon: PieChart },
+    { name: siteConfig.moduleNames.yield, href: "/", icon: Target },
+    { name: siteConfig.moduleNames.market, href: "/market", icon: LineChart },
+    { name: siteConfig.moduleNames.forecast, href: "/forecast", icon: CalendarDays },
+    { name: siteConfig.moduleNames.parity, href: "/parity", icon: Activity },
+    { name: siteConfig.moduleNames.str, href: "/str", icon: PieChart },
     { name: "Configuration", href: "/config", icon: Settings },
 ];
 
@@ -32,12 +33,12 @@ export default function Sidebar() {
         <aside className="w-64 h-screen border-r border-white/[0.08] bg-[#09090B] flex flex-col pt-8 pb-4 shrink-0">
             {/* Brand */}
             <div className="px-6 mb-12 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-md bg-[#EAC54F] shadow-[0_0_15px_rgba(234,197,79,0.3)] flex items-center justify-center">
-                    <span className="text-[#09090B] font-bold text-sm tracking-tighter">ORM</span>
+                <div className="w-8 h-8 rounded-md bg-primary shadow-[0_0_15px_var(--primary)] flex items-center justify-center">
+                    <span className="text-[#09090B] font-bold text-sm tracking-tighter">{siteConfig.company.logo}</span>
                 </div>
                 <div>
-                    <h2 className="text-white font-semibold text-sm tracking-tight leading-tight">ORMpro</h2>
-                    <p className="text-zinc-500 text-[10px] font-medium uppercase tracking-widest">RM Engine</p>
+                    <h2 className="text-white font-semibold text-sm tracking-tight leading-tight">{siteConfig.name}</h2>
+                    <p className="text-zinc-500 text-[10px] font-medium uppercase tracking-widest">{siteConfig.company.name}</p>
                 </div>
             </div>
 
@@ -80,7 +81,7 @@ export default function Sidebar() {
                                 size={16}
                                 className={cn(
                                     "relative z-10 transition-colors duration-300",
-                                    isActive ? "text-[#EAC54F]" : "text-zinc-500 group-hover:text-zinc-300"
+                                    isActive ? "text-primary" : "text-zinc-500 group-hover:text-zinc-300"
                                 )}
                             />
                             <span
@@ -97,7 +98,7 @@ export default function Sidebar() {
                                 <motion.div
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
-                                    className="absolute right-3 w-1.5 h-1.5 rounded-full bg-[#EAC54F] shadow-[0_0_8px_rgba(234,197,79,0.5)] z-10"
+                                    className="absolute right-3 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)] z-10"
                                 />
                             )}
                         </Link>
@@ -110,17 +111,17 @@ export default function Sidebar() {
                 <div className="flex items-center justify-between py-3 border-t border-white/[0.05]">
                     <div className="flex items-center gap-3">
                         <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
-                            <span className="text-white text-xs font-semibold">OA</span>
+                            <span className="text-white text-xs font-semibold">{siteConfig.user.initials}</span>
                         </div>
                         <div>
-                            <p className="text-white text-xs font-medium">Oğuz Atasoy</p>
-                            <p className="text-zinc-500 text-[10px]">Admin</p>
+                            <p className="text-white text-xs font-medium">{siteConfig.user.name}</p>
+                            <p className="text-zinc-500 text-[10px]">{siteConfig.user.role}</p>
                         </div>
                     </div>
                     <button
                         onClick={handleLogout}
                         className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-colors"
-                        title="Se déconnecter"
+                        title="Log Out"
                     >
                         <LogOut size={16} />
                     </button>

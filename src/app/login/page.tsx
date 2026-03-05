@@ -34,7 +34,7 @@ export default function LoginPage() {
             {/* Dynamic Animated Background */}
             <div className="absolute inset-0 z-0 flex items-center justify-center opacity-40">
                 <motion.div
-                    className="absolute w-[800px] h-[800px] bg-[#EAC54F]/10 rounded-full blur-[120px]"
+                    className="absolute w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px]"
                     animate={{
                         scale: [1, 1.2, 1],
                         opacity: [0.3, 0.5, 0.3],
@@ -63,23 +63,23 @@ export default function LoginPage() {
                         transition={{ delay: 0.2, duration: 0.6, ease: strictEase }}
                         className="flex flex-col items-center mb-10"
                     >
-                        <div className="w-12 h-12 rounded-xl bg-[#EAC54F] shadow-[0_0_30px_rgba(234,197,79,0.4)] flex items-center justify-center mb-6">
+                        <div className="w-12 h-12 rounded-xl bg-primary shadow-[0_0_30px_var(--primary)] flex items-center justify-center mb-6">
                             <span className="text-[#09090B] font-bold text-lg tracking-tighter">ORM</span>
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 mb-4">
                             <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                            <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Version de Démonstration (SaaS Beta)</span>
+                            <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Demo Version (Free Preview)</span>
                         </div>
                         <h1 className="text-2xl font-bold text-white tracking-tight mb-2">ORMpro</h1>
                         <p className="text-zinc-400 text-sm text-center mb-6 max-w-sm leading-relaxed">
-                            Le Système d'Intelligence Tarifaire & Prédictive Haute Performance.<br /><br />
+                            The High-Performance Revenue Intelligence & Pricing Platform.<br /><br />
                             <span className="text-xs text-zinc-500">
-                                <b>Note :</b> Les données présentées dans cette plateforme proviennent de l'hôtel <i>Le Provençal</i> à des fins de démonstration.
+                                <b>Note:</b> Data shown on this platform is for demonstration purposes only.
                             </span>
                         </p>
-                        <div className="w-full bg-[#EAC54F]/10 border border-[#EAC54F]/20 text-[#EAC54F] px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-3 text-left">
+                        <div className="w-full bg-primary/10 border border-primary/20 text-primary px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-3 text-left">
                             <KeyRound size={14} className="mt-0.5 shrink-0" />
-                            <span>Veuillez utiliser les accès administrateur pré-remplis ci-dessous pour lancer la simulation de l'outil.</span>
+                            <span>Please use the pre-filled admin credentials below to launch the demo.</span>
                         </div>
                     </motion.div>
 
@@ -95,7 +95,7 @@ export default function LoginPage() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-[#09090B]/50 border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white outline-none focus:border-[#EAC54F]/50 focus:ring-1 focus:ring-[#EAC54F]/50 hover:bg-white/[0.02] hover:border-white/20 transition-all"
+                                className="w-full bg-[#09090B]/50 border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white outline-none focus:border-primary/50 focus:ring-1 focus:ring-[#EAC54F]/50 hover:bg-white/[0.02] hover:border-white/20 transition-all"
                                 placeholder="admin@ormpro.com"
                             />
                         </motion.div>
@@ -107,7 +107,7 @@ export default function LoginPage() {
                         >
                             <div className="flex items-center justify-between ml-1 mb-2">
                                 <label className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Password</label>
-                                <a href="#" className="text-[10px] font-semibold text-[#EAC54F] hover:text-white transition-colors">Forgot?</a>
+                                <a href="#" className="text-[10px] font-semibold text-primary hover:text-white transition-colors">Forgot?</a>
                             </div>
                             <div className="relative">
                                 <input
@@ -115,7 +115,7 @@ export default function LoginPage() {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-[#09090B]/50 border border-white/[0.08] rounded-xl pl-10 pr-4 py-3.5 text-sm text-white outline-none focus:border-[#EAC54F]/50 focus:ring-1 focus:ring-[#EAC54F]/50 hover:bg-white/[0.02] hover:border-white/20 transition-all font-mono"
+                                    className="w-full bg-[#09090B]/50 border border-white/[0.08] rounded-xl pl-10 pr-4 py-3.5 text-sm text-white outline-none focus:border-primary/50 focus:ring-1 focus:ring-[#EAC54F]/50 hover:bg-white/[0.02] hover:border-white/20 transition-all font-mono"
                                     placeholder="••••••••••••"
                                 />
                                 <KeyRound size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
@@ -142,7 +142,7 @@ export default function LoginPage() {
                                     <>
                                         <span className="font-bold text-sm">Sign In to Dashboard</span>
                                         <div className="flex items-center gap-3">
-                                            <span className="text-[10px] font-bold text-white bg-[#EAC54F] px-2 py-1 rounded shadow-sm uppercase tracking-widest hidden sm:block">
+                                            <span className="text-[10px] font-bold text-white bg-primary px-2 py-1 rounded shadow-sm uppercase tracking-widest hidden sm:block">
                                                 Click to Demo
                                             </span>
                                             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

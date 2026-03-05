@@ -3,7 +3,6 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
-import FeedbackButton from "@/components/FeedbackButton";
 
 export default function ClientLayoutWrapper({
     children,
@@ -12,14 +11,15 @@ export default function ClientLayoutWrapper({
 }) {
     const pathname = usePathname();
     const isLoginPage = pathname === "/login";
+    const isLandingPage = pathname === "/landing";
+    const hideSidebar = isLoginPage || isLandingPage;
 
     return (
         <>
-            {!isLoginPage && <Sidebar />}
+            {!hideSidebar && <Sidebar />}
             <main className="flex-1 overflow-y-auto overflow-x-hidden relative">
                 {children}
             </main>
-            {!isLoginPage && <FeedbackButton />}
         </>
     );
 }

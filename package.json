@@ -6,12 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "theme:hotel": "node scripts/set-theme.js hotel",
+    "theme:saas": "node scripts/set-theme.js saas",
+    "theme:ecommerce": "node scripts/set-theme.js ecommerce"
   },
   "dependencies": {
     "@vercel/analytics": "^1.6.1",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.34.3",
+    "framer-motion": "^12.35.0",
     "lucide-react": "^0.575.0",
     "next": "16.1.6",
     "react": "19.2.3",

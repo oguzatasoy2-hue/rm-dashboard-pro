@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Activity, Search, AlertOctagon, TrendingDown, ArrowRight, Download, Loader2 } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
+import { generateParityData, type ParityData } from "@/data/mock";
+import { siteConfig } from "@/config/site";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -21,43 +23,8 @@ const itemVariants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: strictEase } }
 };
 
-// Mockup Data replicating the python generator logic for Parity
-const generateParityData = () => {
-    const data = [];
-    const startDay = new Date();
-
-    // Create 15 instances of parity scans
-    for (let i = 0; i < 15; i++) {
-        const current = new Date(startDay);
-        current.setDate(startDay.getDate() + Math.floor(Math.random() * 30)); // Search random future dates
-        const dateStr = current.toLocaleDateString("en-GB", { weekday: 'short', day: "2-digit", month: "short" });
-
-        // Core logic mockup - 30% chance of OTA undercutting
-        const isUndercut = Math.random() < 0.35;
-        const directPrice = 145 + Math.floor(Math.random() * 40);
-        const otaMargin = isUndercut ? (Math.random() * 0.15 + 0.05) : 0; // 5% to 20% cheaper
-        const otaPrice = directPrice * (1 - otaMargin);
-
-        const otaList = ["Booking.com", "Expedia", "Agoda", "Trip.com"];
-
-        data.push({
-            id: `scn_${Math.random().toString(36).substr(2, 9)}`,
-            checkin: dateStr,
-            ota: otaList[Math.floor(Math.random() * otaList.length)],
-            directPrice: directPrice,
-            otaPrice: otaPrice,
-            isUndercut: isUndercut,
-            diffPerc: isUndercut ? otaMargin * 100 : 0,
-            diffAmount: isUndercut ? directPrice - otaPrice : 0,
-        });
-    }
-
-    // Sort to put the most critical parity issues first
-    return data.sort((a, b) => b.diffAmount - a.diffAmount);
-};
-
 export default function ParityPage() {
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<ParityData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -96,7 +63,7 @@ export default function ParityPage() {
                     <div className="flex items-end justify-between">
                         <div>
                             <div className="flex items-center gap-3 mb-2">
-                                <h1 className="text-3xl font-semibold text-white tracking-tight">Rate Parity Insight</h1>
+                                <h1 className="text-3xl font-semibold text-white tracking-tight">{siteConfig.moduleNames.parity}</h1>
                                 {issuesCount > 0 && (
                                     <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold uppercase tracking-wider">
                                         <AlertOctagon size={12} />
@@ -111,26 +78,25 @@ export default function ParityPage() {
                                 <Search size={14} className="text-zinc-400" />
                                 <span className="text-xs font-medium text-white">Manual Scan</span>
                             </button>
-                            <button className="flex items-center gap-2 bg-[#EAC54F]/10 hover:bg-[#EAC54F]/20 border border-[#EAC54F]/20 px-4 py-2 rounded-lg transition-all duration-300">
-                                <Download size={14} className="text-[#EAC54F]" />
-                                <span className="text-xs font-medium text-[#EAC54F]">Export Report</span>
+                            <button className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 border border-primary/20 px-4 py-2 rounded-lg transition-all duration-300">
+                                <Download size={14} className="text-primary" />
+                                <span className="text-xs font-medium text-primary">Export Report</span>
                             </button>
                         </div>
                     </div>
                 </motion.div>
 
                 <ModuleInfo
-                    title="Rate Parity"
-                    utility="Protection de la marge bénéficiaire et du canal de vente direct."
-                    concrete="Détecte en temps réel si une OTA (Booking/Expedia) vend vos chambres moins cher que votre propre site."
-                    usage="En cas d'alerte rouge, contactez l'OTA ou ajustez votre Channel Manager pour restaurer la parité et éviter de payer des commissions inutiles."
+                    utility="Protecting your profit margin and direct sales channel."
+                    concrete="Detects in real-time if an OTA (Booking/Expedia) is selling your rooms below your own website price."
+                    usage="In case of a red alert, contact the OTA or adjust your Channel Manager to restore parity and avoid paying unnecessary commissions."
                 />
 
                 {/* KPIs */}
                 <motion.div variants={itemVariants} className="grid grid-cols-3 gap-6">
                     <div className="bg-red-500/[0.02] border border-red-500/10 p-5 rounded-2xl">
                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-[10px] font-semibold uppercase tracking-widest text-red-400">Total Parity Violations</span>
+                            <span className="text-[10px] font-semibold uppercase tracking-widest text-red-400">Total {siteConfig.kpis.parityUndercut}</span>
                             <Activity size={14} className="text-red-400" />
                         </div>
                         <div className="flex items-baseline gap-2">

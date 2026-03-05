@@ -14,9 +14,14 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
+import { siteConfig } from "@/config/site";
+
 export const metadata: Metadata = {
-    title: "ORMpro System",
-    description: "Next Generation Revenue Management Dashboard",
+    title: {
+        default: siteConfig.name,
+        template: `%s | ${siteConfig.name}`,
+    },
+    description: siteConfig.description,
 };
 
 export default function RootLayout({
@@ -25,7 +30,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#09090B] text-white flex h-screen overflow-hidden`}>
                 <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
                 <Analytics />

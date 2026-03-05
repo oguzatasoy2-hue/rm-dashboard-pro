@@ -62,10 +62,9 @@ export default function ConfigPage() {
                 </motion.div>
 
                 <ModuleInfo
-                    title="Configuration"
-                    utility="Personnalisation de l'intelligence métier et des paramètres système de l'outil."
-                    concrete="Réglages complets de votre environnement (CompSet, types de chambres, clés API externes)."
-                    usage="Mettez à jour vos listes de concurrents directs pour que les calculs de Yield restent pertinents par rapport à votre positionnement réel."
+                    utility="System Configuration"
+                    concrete="Configure data sources, local currency, and parity alert thresholds."
+                    usage="Regularly check your API connections (Amadeus, Google) to guarantee forecast accuracy."
                 />
 
                 {/* Global Form Content */}
@@ -74,7 +73,7 @@ export default function ConfigPage() {
                     {/* Section 1: Property Profile */}
                     <div className="bg-[#FFFFFF]/[0.02] border border-white/[0.05] rounded-2xl overflow-hidden">
                         <div className="border-b border-white/[0.05] bg-[#09090B] px-6 py-4 flex items-center gap-2">
-                            <Building2 size={16} className="text-[#EAC54F]" />
+                            <Building2 size={16} className="text-primary" />
                             <h2 className="text-sm font-semibold text-white">Property Profile</h2>
                         </div>
                         <div className="p-6 grid grid-cols-2 gap-6">
@@ -93,7 +92,7 @@ export default function ConfigPage() {
                                 <label className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Market Engine Location</label>
                                 <div className="relative">
                                     <MapPin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
-                                    <select className="w-full bg-white/[0.02] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white outline-none focus:border-[#EAC54F]/50 focus:ring-1 focus:ring-[#EAC54F]/50 hover:border-white/20 transition-all appearance-none cursor-pointer">
+                                    <select className="w-full bg-white/[0.02] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white outline-none focus:border-primary/50 focus:ring-1 focus:ring-[#EAC54F]/50 hover:border-white/20 transition-all appearance-none cursor-pointer">
                                         <option value="bordeaux" className="bg-[#09090B]">Bordeaux (Base)</option>
                                         <option value="paris" className="bg-[#09090B]">Paris</option>
                                         <option value="lyon" className="bg-[#09090B]">Lyon</option>
@@ -107,7 +106,7 @@ export default function ConfigPage() {
                                 <label className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Inventory Capacity</label>
                                 <input
                                     type="number"
-                                    className="w-full bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.08] hover:border-white/20 rounded-xl px-4 py-3 text-sm text-white tabular-nums outline-none focus:border-[#EAC54F]/50 focus:bg-white/[0.02] transition-all"
+                                    className="w-full bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.08] hover:border-white/20 rounded-xl px-4 py-3 text-sm text-white tabular-nums outline-none focus:border-primary/50 focus:bg-white/[0.02] transition-all"
                                     defaultValue={50}
                                 />
                             </div>
@@ -116,7 +115,7 @@ export default function ConfigPage() {
                                 <label className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Base Price (EUR)</label>
                                 <input
                                     type="number"
-                                    className="w-full bg-white/[0.02] border border-white/[0.08] hover:border-white/20 rounded-xl px-4 py-3 text-sm text-white tabular-nums outline-none focus:border-[#EAC54F]/50 transition-all"
+                                    className="w-full bg-white/[0.02] border border-white/[0.08] hover:border-white/20 rounded-xl px-4 py-3 text-sm text-white tabular-nums outline-none focus:border-primary/50 transition-all"
                                     defaultValue={85}
                                 />
                             </div>
@@ -126,7 +125,7 @@ export default function ConfigPage() {
                     {/* Section 2: CompSet Rules */}
                     <div className="bg-[#FFFFFF]/[0.02] border border-white/[0.05] rounded-2xl overflow-hidden">
                         <div className="border-b border-white/[0.05] bg-[#09090B] px-6 py-4 flex items-center gap-2">
-                            <Globe size={16} className="text-[#EAC54F]" />
+                            <Globe size={16} className="text-primary" />
                             <h2 className="text-sm font-semibold text-white">CompSet Heuristics</h2>
                         </div>
                         <div className="p-6">
@@ -137,7 +136,7 @@ export default function ConfigPage() {
                                     {[1, 2, 3, 4, 5].map((star) => (
                                         <label key={star} className="relative cursor-pointer group">
                                             <input type="radio" name="stars" value={star} defaultChecked={star === 3} className="peer sr-only" />
-                                            <div className="w-full text-center py-3 rounded-xl border border-white/[0.05] bg-white/[0.02] text-zinc-400 font-semibold group-hover:border-white/20 peer-checked:bg-[#EAC54F]/10 peer-checked:border-[#EAC54F]/40 peer-checked:text-[#EAC54F] transition-all">
+                                            <div className="w-full text-center py-3 rounded-xl border border-white/[0.05] bg-white/[0.02] text-zinc-400 font-semibold group-hover:border-white/20 peer-checked:bg-primary/10 peer-checked:border-primary/40 peer-checked:text-primary transition-all">
                                                 {star} ★
                                             </div>
                                         </label>
@@ -151,7 +150,7 @@ export default function ConfigPage() {
                     {/* Section 3: API Connections */}
                     <div className="bg-[#FFFFFF]/[0.02] border border-white/[0.05] rounded-2xl overflow-hidden">
                         <div className="border-b border-white/[0.05] bg-[#09090B] px-6 py-4 flex items-center gap-2">
-                            <Key size={16} className="text-[#EAC54F]" />
+                            <Key size={16} className="text-primary" />
                             <h2 className="text-sm font-semibold text-white">External Integrations</h2>
                         </div>
                         <div className="p-6 space-y-6">
@@ -163,7 +162,7 @@ export default function ConfigPage() {
                                 </div>
                                 <input
                                     type="password"
-                                    className="w-full bg-[#09090B] border border-white/[0.08] hover:border-white/20 rounded-xl px-4 py-3 text-sm text-zinc-300 outline-none focus:border-[#EAC54F]/50 transition-all font-mono"
+                                    className="w-full bg-[#09090B] border border-white/[0.08] hover:border-white/20 rounded-xl px-4 py-3 text-sm text-zinc-300 outline-none focus:border-primary/50 transition-all font-mono"
                                     defaultValue="amadeus_prod_key_xxxxxxxxxxxxxxxxxxxxxxxxxx"
                                 />
                             </div>
