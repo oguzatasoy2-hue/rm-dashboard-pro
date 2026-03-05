@@ -11,15 +11,15 @@ export default function ClientLayoutWrapper({
 }) {
     const pathname = usePathname();
     const isLoginPage = pathname === "/login";
-    const isLandingPage = pathname === "/landing";
+    const isLandingPage = pathname === "/landing" || pathname === "/";
     const hideSidebar = isLoginPage || isLandingPage;
 
     return (
-        <>
+        <div className={hideSidebar ? "min-h-screen" : "flex h-screen overflow-hidden"}>
             {!hideSidebar && <Sidebar />}
-            <main className="flex-1 overflow-y-auto overflow-x-hidden relative">
+            <main className={hideSidebar ? "" : "flex-1 overflow-y-auto overflow-x-hidden relative"}>
                 {children}
             </main>
-        </>
+        </div>
     );
 }
