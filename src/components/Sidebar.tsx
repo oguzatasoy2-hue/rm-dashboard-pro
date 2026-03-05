@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Target, LineChart, CalendarDays, Settings, Activity, PieChart, LogOut } from "lucide-react";
+import { Target, LineChart, CalendarDays, Settings, Activity, PieChart, LogOut, MessageSquareHeart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { LogoORM } from "@/components/LogoORM";
+import FeedbackForm from "@/components/FeedbackForm";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
@@ -24,6 +25,7 @@ export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
     const [hoveredPath, setHoveredPath] = useState<string | null>(null);
+    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
     const handleLogout = () => {
         document.cookie = "rm_pro_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -103,8 +105,23 @@ export default function Sidebar() {
                 })}
             </nav>
 
+            {/* Feedback Block */}
+            <div className="px-4 mb-6">
+                <button
+                    onClick={() => setIsFeedbackOpen(true)}
+                    className="w-full relative group overflow-hidden bg-white/[0.02] border border-white/[0.05] hover:border-white/20 transition-all rounded-2xl p-4 text-left"
+                >
+                    <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all">
+                        <MessageSquareHeart size={20} className="text-primary" />
+                    </div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Feedback</p>
+                    <p className="text-xs font-semibold text-white mb-0.5">Give your feedback</p>
+                    <p className="text-[10px] text-zinc-600">Help us grow RMpro</p>
+                </button>
+            </div>
+
             {/* User Profile Hook */}
-            <div className="px-6 mt-auto">
+            <div className="px-6">
                 <div className="flex items-center justify-between py-3 border-t border-white/[0.05]">
                     <div className="flex items-center gap-3">
                         <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
@@ -124,6 +141,8 @@ export default function Sidebar() {
                     </button>
                 </div>
             </div>
+
+            <FeedbackForm isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
         </aside>
     );
 }
