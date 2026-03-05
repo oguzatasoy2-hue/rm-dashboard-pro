@@ -13,8 +13,12 @@ import {
   Star,
   Code2,
   ExternalLink,
+  Smartphone,
+  Cpu,
+  Waves,
 } from "lucide-react";
 import Link from "next/link";
+import { LogoORM } from "@/components/LogoORM";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -131,10 +135,9 @@ export default function LandingPage() {
       {/* ─── NAV ─── */}
       <nav className="fixed top-4 left-4 right-4 z-[100] flex justify-center">
         <div className="flex items-center justify-between w-full max-w-6xl px-6 py-3 rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl">
-          <div className="flex items-center gap-2">
-            <BarChart3 className="text-[#EAC54F]" size={22} strokeWidth={2.5} />
-            <span className="text-xl font-bold tracking-tight">ORMpro</span>
-          </div>
+          <Link href="/" className="flex items-center gap-2">
+            <LogoORM />
+          </Link>
 
           <div className="hidden md:flex items-center gap-8">
             {["Features", "Modules", "Pricing"].map((item) => (
@@ -522,6 +525,87 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── FUTURE TOOLS (ROADMAP) ─── */}
+      <section id="roadmap" className="relative z-10 max-w-6xl mx-auto px-6 pb-28 text-center sm:text-left">
+        <div className="text-center mb-14">
+          <p className="text-[10px] uppercase font-semibold tracking-widest text-[#00F2FE] mb-3">Roadmap 2026</p>
+          <h2 className="text-4xl font-bold tracking-tight">Scaling Beyond the Dashboard.</h2>
+          <p className="text-zinc-400 mt-4 max-w-2xl mx-auto">
+            We are building the future of autonomous revenue management. Here is what is coming next.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Future 1: Mobile */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="relative group overflow-hidden border border-white/[0.08] bg-white/[0.01] rounded-[32px] p-8 hover:bg-white/[0.03] transition-all duration-500"
+          >
+            <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+              <Smartphone size={120} className="text-[#00F2FE] opacity-[0.03] -rotate-12 translate-x-12 translate-y-4" />
+            </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00F2FE]/10 border border-[#00F2FE]/20 mb-6 mx-auto sm:mx-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00F2FE] animate-pulse" />
+              <span className="text-[9px] font-bold text-[#00F2FE] uppercase tracking-widest">In Development</span>
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-4">Mobile App Pro</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-8">
+              Revenue management in your pocket. Receive instant volatility alerts and push new rates with a single swipe. Approve AI recommendations from anywhere.
+            </p>
+            <div className="flex items-center justify-center sm:justify-start gap-2 text-[#00F2FE] text-xs font-bold uppercase tracking-wider group-hover:gap-3 transition-all">
+              Coming Q3 2026 <ArrowRight size={14} />
+            </div>
+          </motion.div>
+
+          {/* Future 2: AI Autopilot */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="relative group overflow-hidden border border-[#00F2FE]/30 bg-[#00F2FE]/[0.02] rounded-[32px] p-8 hover:bg-[#00F2FE]/[0.05] transition-all duration-500"
+          >
+            <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#00F2FE]/10 rounded-full blur-[60px] pointer-events-none" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00F2FE] text-[#09090B] mb-6 mx-auto sm:mx-0">
+              <Cpu size={12} strokeWidth={3} />
+              <span className="text-[9px] font-bold uppercase tracking-widest">Main R&D Goal</span>
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-4">AI Autopilot</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-8">
+              A co-pilot that doesn't just suggest—it acts. When confidence scores hit 95%, the system can automatically push rate updates to your PMS. Zero-touch RM.
+            </p>
+            <div className="flex items-center justify-center sm:justify-start gap-2 text-[#00F2FE] text-xs font-bold uppercase tracking-wider group-hover:gap-3 transition-all">
+              Alpha Testing <ArrowRight size={14} />
+            </div>
+          </motion.div>
+
+          {/* Future 3: Sentiment Pulse */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="relative group overflow-hidden border border-white/[0.08] bg-white/[0.01] rounded-[32px] p-8 hover:bg-white/[0.03] transition-all duration-500"
+          >
+            <div className="absolute bottom-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+              <Waves size={100} className="text-[#00F2FE] opacity-[0.03]" />
+            </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 mb-6 mx-auto sm:mx-0">
+              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest italic">Research Phase</span>
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-4">Semantic Pulse</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-8">
+              Anticipate demand elasticities by analyzing social sentiment and review patterns. Predict guest behavior shifts before they hit your booking engine.
+            </p>
+            <div className="flex items-center justify-center sm:justify-start gap-2 text-zinc-500 text-xs font-bold uppercase tracking-wider">
+              Planning Stage <ArrowRight size={14} className="opacity-0" />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ─── SOCIAL PROOF ─── */}
       <section className="relative z-10 max-w-6xl mx-auto px-6 pb-28">
         <div className="text-center mb-14">
@@ -693,8 +777,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
             <div>
               <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
-                <BarChart3 size={20} style={{ color: mod.color }} strokeWidth={2.5} />
-                <span className="font-semibold text-lg text-white tracking-tight">ORMpro</span>
+                <LogoORM />
               </div>
               <p className="text-sm text-zinc-500 leading-relaxed max-w-xs mx-auto md:mx-0">
                 Empowering hotels with next-gen revenue management intelligence. Built for modern Revenue Managers.

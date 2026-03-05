@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Target, LineChart, CalendarDays, Settings, Activity, PieChart, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
+import { LogoORM } from "@/components/LogoORM";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
@@ -33,13 +34,9 @@ export default function Sidebar() {
         <aside className="w-64 h-screen border-r border-white/[0.08] bg-[#09090B] flex flex-col pt-8 pb-4 shrink-0">
             {/* Brand */}
             <div className="px-6 mb-12 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-md bg-primary shadow-[0_0_15px_var(--primary)] flex items-center justify-center">
-                    <span className="text-[#09090B] font-bold text-sm tracking-tighter">{siteConfig.company.logo}</span>
-                </div>
-                <div>
-                    <h2 className="text-white font-semibold text-sm tracking-tight leading-tight">{siteConfig.name}</h2>
-                    <p className="text-zinc-500 text-[10px] font-medium uppercase tracking-widest">{siteConfig.company.name}</p>
-                </div>
+                <Link href="/" className="hover:opacity-80 transition-opacity">
+                    <LogoORM />
+                </Link>
             </div>
 
             {/* Navigation */}
