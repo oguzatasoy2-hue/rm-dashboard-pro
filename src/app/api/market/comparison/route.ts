@@ -1,54 +1,83 @@
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
+/**
+ * API Endpoint: /api/market/comparison
+ * Returns a robust simulation of the competitive set for Hôtel Le Provençal.
+ */
 export async function GET() {
-    // Simulate a specific set of competitors for Hôtel Le Provençal
-    const competitors = [
-        { id: 1, name: "Pullman Bordeaux Lac", segment: "Upscale", stars: 4 },
-        { id: 2, name: "Mercure Bordeaux Lac", segment: "Midscale", stars: 4 },
-        { id: 3, name: "Novotel Bordeaux Lac", segment: "Midscale", stars: 4 },
-        { id: 4, name: "Ibis Bordeaux Lac", segment: "Economy", stars: 3 },
-        { id: 5, name: "Hôtel Campanile Bordeaux Lac", segment: "Economy", stars: 3 },
-    ];
+    try {
+        // High-precision competitor mapping for Bordeaux Lac
+        const competitors = [
+            { id: "comp_1", name: "Pullman Bordeaux Lac", distance: "0.2km", segment: "Luxury/Upscale" },
+            { id: "comp_2", name: "Mercure Bordeaux Lac", distance: "0.4km", segment: "Midscale" },
+            { id: "comp_3", name: "Novotel Bordeaux Lac", distance: "0.5km", segment: "Midscale" },
+            { id: "comp_4", name: "Ibis Bordeaux Lac", distance: "0.6km", segment: "Economy" },
+            { id: "comp_5", name: "Campanile Bordeaux Lac", distance: "0.8km", segment: "Economy" }
+        ];
 
-    const days = 14;
-    const comparisonData = [];
-    const today = new Date();
+        // 14-day timeline with deterministic noise for "realism"
+        const timeline = Array.from({ length: 14 }).map((_, i) => {
+            const date = new Date();
+            date.setDate(date.getDate() + i);
+            const dateStr = date.toISOString().split('T')[0];
 
-    for (let i = 0; i < days; i++) {
-        const d = new Date(today);
-        d.setDate(today.getDate() + i);
-        const dateStr = d.toISOString().split('T')[0];
-        const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+            // Base price varies by weekday
+            const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+            const basePrice = isWeekend ? 175 : 145;
 
-        // Base price for Le Provençal
-        const baseProvençal = isWeekend ? 165 : 142;
-        const randomProvençal = baseProvençal + Math.floor(Math.random() * 20) - 5;
+            return {
+                date: dateStr,
+                provençal: basePrice + Math.sin(i) * 5,
+                "Pullman Bordeaux Lac": (basePrice * 1.25) + Math.cos(i) * 10,
+                "Mercure Bordeaux Lac": (basePrice * 1.1) + Math.sin(i * 1.5) * 8,
+                "Novotel Bordeaux Lac": (basePrice * 1.05) + Math.cos(i * 0.8) * 6,
+                "Ibis Bordeaux Lac": (basePrice * 0.85) + Math.sin(i * 2) * 4,
+                "Campanile Bordeaux Lac": (basePrice * 0.8) + Math.cos(i * 1.2) * 5
+            };
+        });
 
-        const prices: Record<string, number> = {
-            provençal: randomProvençal,
+        // Computed summary
+        const currentAverages = competitors.map(c => {
+            const prices = timeline.map(t => t[c.name as keyof typeof t] as number);
+            return {
+                name: c.name,
+                avg: prices.reduce((a, b) => a + b, 0) / prices.length
+            };
+        });
+
+        const marketAvg = currentAverages.reduce((acc, c) => acc + c.avg, 0) / currentAverages.length;
+        const ourAvg = timeline.reduce((acc, t) => acc + t.provençal, 0) / timeline.length;
+
+        const response = {
+            hotel_name: "Hôtel Le Provençal",
+            location: "Bordeaux Lac",
+            currency: "EUR",
+            competitors: competitors,
+            timeline: timeline,
+            summary: {
+                market_average: parseFloat(marketAvg.toFixed(2)),
+                our_average: parseFloat(ourAvg.toFixed(2)),
+                positioning_index: parseFloat((ourAvg / marketAvg).toFixed(3)),
+                cheapest_competitor: currentAverages.sort((a, b) => a.avg - b.avg)[0].name,
+                most_expensive_comp: currentAverages.sort((a, b) => b.avg - a.avg)[0].name,
+                status: "Optimal"
+            },
+            last_update: new Date().toISOString()
         };
 
-        competitors.forEach(comp => {
-            const base = isWeekend ? 175 : 150;
-            const offset = comp.segment === 'Upscale' ? 20 : comp.segment === 'Economy' ? -30 : 0;
-            prices[comp.name] = base + offset + Math.floor(Math.random() * 30) - 10;
+        return NextResponse.json(response, {
+            status: 200,
+            headers: {
+                'Cache-Control': 'no-store, max-age=0',
+            }
         });
-
-        comparisonData.push({
-            date: dateStr,
-            ...prices
-        });
+    } catch (error) {
+        console.error("Critical API Error (Comparison):", error);
+        return NextResponse.json({
+            error: "Failed to generate market comparison data",
+            details: error instanceof Error ? error.message : "Unknown error"
+        }, { status: 500 });
     }
-
-    return NextResponse.json({
-        hotel_name: "Hôtel Le Provençal",
-        competitors: competitors,
-        timeline: comparisonData,
-        summary: {
-            market_average: 154,
-            positioning_index: 0.94, // We are slightly cheaper than market avg
-            cheapest_comp: "Ibis Bordeaux Lac",
-            most_expensive_comp: "Pullman Bordeaux Lac"
-        }
-    });
 }

@@ -1,20 +1,53 @@
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * API Endpoint: /api/revenue/forecast
- * Returns personalized forecasting for Hôtel Le Provençal
+ * Algorithmic demand forecasting for Hôtel Le Provençal.
  */
 export async function GET() {
     try {
-        const forecastData = [
-            { date: "Mar 20", occupancy: 48, price: 145, wtp: 155, pace: 3, demand: "Low", isWeekend: false },
-            { date: "Mar 21", occupancy: 55, price: 145, wtp: 155, pace: 5, demand: "Medium", isWeekend: false },
-            { date: "Mar 22", occupancy: 72, price: 155, wtp: 165, pace: 9, demand: "High", isWeekend: false, event: "TECH" },
-            { date: "Mar 23", occupancy: 88, price: 175, wtp: 185, pace: 14, demand: "High", isWeekend: true },
-            { date: "Mar 24", occupancy: 94, price: 195, wtp: 215, pace: 18, demand: "High", isWeekend: true },
-            { date: "Mar 25", occupancy: 65, price: 155, wtp: 160, pace: -1, demand: "Medium", isWeekend: false },
-            { date: "Mar 26", occupancy: 58, price: 145, wtp: 150, pace: 2, demand: "Low", isWeekend: false }
-        ];
+        const now = new Date();
+
+        // Generate a 30-day forecast grid
+        const forecastData = Array.from({ length: 30 }).map((_, i) => {
+            const date = new Date(now);
+            date.setDate(date.getDate() + i);
+            const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+            const isWeekend = date.getDay() === 0 || date.getDay() === 6 || date.getDay() === 5;
+
+            // Simulation logic
+            const baseOcc = isWeekend ? 75 : 45;
+            const variance = Math.sin(i * 0.5) * 15;
+            const occupancy = Math.min(100, Math.max(0, Math.round(baseOcc + variance + (i * 0.5))));
+
+            const basePrice = 145;
+            const priceVariance = (occupancy > 80 ? 40 : occupancy > 60 ? 20 : 0);
+            const price = basePrice + priceVariance + (isWeekend ? 30 : 0);
+
+            const wtp = price + 15 + Math.random() * 10;
+            const pace = Math.round(Math.sin(i * 0.8) * 5 + (occupancy / 20));
+
+            // Random local event mapping
+            let event = undefined;
+            if (i === 2) event = "CONGRESS";
+            if (i === 12) event = "MATCH";
+            if (i === 22) event = "EXPO";
+
+            return {
+                date: dateStr,
+                fullDate: date.toISOString().split('T')[0],
+                occupancy: occupancy,
+                price: price,
+                wtp: Math.round(wtp),
+                pace: pace,
+                demand: occupancy > 85 ? "High" : occupancy > 50 ? "Medium" : "Low",
+                isWeekend: isWeekend,
+                event: event
+            };
+        });
 
         return NextResponse.json(forecastData, {
             status: 200,
@@ -23,7 +56,10 @@ export async function GET() {
             }
         });
     } catch (error) {
-        console.error("API Forecast Error:", error);
-        return NextResponse.json({ error: "Failed to fetch forecast" }, { status: 500 });
+        console.error("Critical API Error (Forecast):", error);
+        return NextResponse.json({
+            error: "Failed to generate forecasting data",
+            details: error instanceof Error ? error.message : "Unknown error"
+        }, { status: 500 });
     }
 }
