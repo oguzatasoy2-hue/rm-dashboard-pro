@@ -103,6 +103,18 @@ export const apiClient = {
         return res.json();
     },
 
+    async getComparison(): Promise<any> {
+        const res = await fetch('/api/market/comparison', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch comparison data');
+        return res.json();
+    },
+
+    async getEvents(): Promise<any> {
+        const res = await fetch('/api/market/events', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch events data');
+        return res.json();
+    },
+
     async getRecommendations(): Promise<Recommendation[]> {
         const res = await fetch('/api/revenue/recommendations', { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch recommendations');

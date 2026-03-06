@@ -18,6 +18,8 @@ export const nichesInfo = {
             forecast: "Forecasting",
             parity: "Rate Parity",
             str: "STR Benchmark",
+            comparison: "Price Comparison",
+            events: "Event Tracker",
         },
         kpis: {
             yieldVal1: "Our ADR (Base)",
