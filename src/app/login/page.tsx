@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Loader2, KeyRound } from "lucide-react";
 import { LogoORM } from "@/components/LogoORM";
 
+import { loginAction } from "@/app/actions/authActions";
+
 // Linear/Vercel smooth acceleration curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
@@ -14,19 +16,32 @@ export default function LoginPage() {
     const [email, setEmail] = useState("admin@ormpro.com");
     const [password, setPassword] = useState("ORMpro_Secure_2026");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email || !password) return;
 
         setIsSubmitting(true);
+        setError(null);
 
-        // Simulate Authentication delay 
-        setTimeout(() => {
-            // Set simple cookie to bypass middleware for prototype
-            document.cookie = "rm_pro_session=authenticated; path=/; max-age=86400";
-            router.push("/dashboard");
-        }, 1500);
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("password", password);
+
+        try {
+            const result = await loginAction(formData);
+            if (result.success) {
+                router.push("/dashboard");
+                router.refresh();
+            } else {
+                setError(result.error || "Authentication failed");
+                setIsSubmitting(false);
+            }
+        } catch (err) {
+            setError("A server error occurred. Please try again.");
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -78,6 +93,11 @@ export default function LoginPage() {
                                 <b>Note:</b> Data shown on this platform is for demonstration purposes only.
                             </span>
                         </p>
+                        {error && (
+                            <div className="w-full bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg text-xs font-medium mb-4">
+                                {error}
+                            </div>
+                        )}
                         <div className="w-full bg-primary/10 border border-primary/20 text-primary px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-3 text-left">
                             <KeyRound size={14} className="mt-0.5 shrink-0" />
                             <span>Please use the pre-filled admin credentials below to launch the demo.</span>

@@ -1,21 +1,24 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { decrypt } from '@/lib/auth';
 
-export function middleware(request: NextRequest) {
-    // In a real app, you would check for a session cookie here.
-    // For the portfolio showcase, we simulate the logic by checking a mock cookie.
-    const hasAuthToken = request.cookies.has('rm_pro_session');
+export async function middleware(request: NextRequest) {
+    const sessionCookie = request.cookies.get('rm_pro_session')?.value;
 
-    // If the user is trying to access protected pages without a token
+    // Decrypt and verify the token (Zero Trust)
+    const session = sessionCookie ? await decrypt(sessionCookie) : null;
+    const hasValidAuth = !!session;
+
+    // If the user is trying to access protected pages without a VALID token
     const isPublicPath = request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/landing' || request.nextUrl.pathname === '/';
 
-    if (!hasAuthToken && !isPublicPath) {
+    if (!hasValidAuth && !isPublicPath) {
         // Redirect them to the /login page
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    // If they are on the login page but ALREADY have a token, send them to the dashboard
-    if (hasAuthToken && request.nextUrl.pathname === '/login') {
+    // If they are on the login page but ALREADY have a VALID token, send them to the dashboard
+    if (hasValidAuth && request.nextUrl.pathname === '/login') {
         return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
