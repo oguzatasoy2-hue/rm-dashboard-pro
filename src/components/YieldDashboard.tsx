@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Download, ChevronLeft, ChevronRight, Loader2, Calendar, LayoutGrid, List } from 'lucide-react';
 import ModuleInfo from "./ModuleInfo";
-import { generateMockYieldData, type YieldPositioningData } from "@/data/mock";
 import { siteConfig } from "@/config/site";
+import { apiClient, type MarketData } from "@/lib/api-client";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -14,16 +14,22 @@ const strictEase = [0.16, 1, 0.3, 1] as const;
 
 export default function YieldDashboard() {
   const [weekOffset, setWeekOffset] = useState(0);
-  const [data, setData] = useState<YieldPositioningData | null>(null);
+  const [data, setData] = useState<MarketData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API fetch on pagination change
-    const timer = setTimeout(() => {
-      setData(generateMockYieldData(weekOffset));
-      setIsLoading(false);
-    }, 600);
-    return () => clearTimeout(timer);
+    async function fetchData() {
+      setIsLoading(true);
+      try {
+        const trends = await apiClient.getMarketTrends();
+        setData(trends);
+      } catch (error) {
+        console.error("Failed to load dashboard data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData();
   }, [weekOffset]);
 
 
@@ -97,8 +103,10 @@ export default function YieldDashboard() {
               <div className="w-24 h-10 bg-white/[0.05] rounded-md animate-pulse"></div>
             ) : (
               <>
-                <p className="text-5xl font-semibold text-white tracking-tight">{data?.currentHotelAdr}</p>
-                <span className="text-2xl text-zinc-500 font-medium">{data?.currency}</span>
+                <p className="text-5xl font-semibold text-white tracking-tight">
+                  {data?.trends?.[0]?.average_daily_rate || 0}
+                </p>
+                <span className="text-2xl text-zinc-500 font-medium">EUR</span>
               </>
             )}
           </div>
@@ -111,8 +119,10 @@ export default function YieldDashboard() {
               <div className="w-24 h-10 bg-white/[0.05] rounded-md animate-pulse"></div>
             ) : (
               <>
-                <p className="text-5xl font-semibold text-white tracking-tight">{data?.currentCompSetAdr}</p>
-                <span className="text-2xl text-zinc-500 font-medium">{data?.currency}</span>
+                <p className="text-5xl font-semibold text-white tracking-tight">
+                  {data?.trends?.[0]?.comp_set_adr || 0}
+                </p>
+                <span className="text-2xl text-zinc-500 font-medium">EUR</span>
               </>
             )}
           </div>
@@ -128,8 +138,8 @@ export default function YieldDashboard() {
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data?.chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <XAxis dataKey="timestamp" axisLine={false} tickLine={false} tick={{ fill: '#71717A', fontSize: 11 }} dy={15} />
+            <LineChart data={data?.trends} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fill: '#71717A', fontSize: 11 }} dy={15} />
               <YAxis axisLine={false} tickLine={false} tick={{ fill: '#71717A', fontSize: 11 }} dx={-10} domain={['dataMin - 10', 'dataMax + 10']} />
 
               {/* Custom Tooltip Dark Mode */}
@@ -138,8 +148,8 @@ export default function YieldDashboard() {
                 itemStyle={{ color: 'var(--primary)', fontWeight: 600 }}
               />
 
-              <Line type="monotone" name={siteConfig.kpis.chartLine2} dataKey="compSetAvgPrice" stroke="#71717A" strokeWidth={2} strokeDasharray="4 4" dot={{ fill: '#09090B', r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-              <Line type="monotone" name={siteConfig.kpis.chartLine1} dataKey="hotelPrice" stroke="var(--primary)" strokeWidth={2} dot={{ fill: '#09090B', r: 4, strokeWidth: 2 }} activeDot={{ r: 6, stroke: 'var(--primary)', strokeWidth: 2, fill: '#09090B' }} />
+              <Line type="monotone" name={siteConfig.kpis.chartLine2} dataKey="comp_set_adr" stroke="#71717A" strokeWidth={2} strokeDasharray="4 4" dot={{ fill: '#09090B', r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+              <Line type="monotone" name={siteConfig.kpis.chartLine1} dataKey="average_daily_rate" stroke="var(--primary)" strokeWidth={2} dot={{ fill: '#09090B', r: 4, strokeWidth: 2 }} activeDot={{ r: 6, stroke: 'var(--primary)', strokeWidth: 2, fill: '#09090B' }} />
             </LineChart>
           </ResponsiveContainer>
         )}
