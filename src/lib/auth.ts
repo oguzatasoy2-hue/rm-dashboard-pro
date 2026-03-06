@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const SECRET_KEY = "rm_pro_ultra_secure_secret_289382cf6885cb70";
+const SECRET_KEY = process.env.AUTH_SECRET || "fallback_secret_for_dev_only";
 
 // Helper to sign a payload and get a token
 async function sign(payload: string, secret: string) {

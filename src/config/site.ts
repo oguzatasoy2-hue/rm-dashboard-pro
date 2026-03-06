@@ -8,8 +8,8 @@ export const ACTIVE_NICHE: NicheType = "hotel";
 
 export const nichesInfo = {
     hotel: {
-        name: "PropertyPro",
-        description: "Next Generation Revenue Management Dashboard",
+        name: "ORMpro System Analytics",
+        description: "Advanced Revenue Management & Yield Optimization Dashboard for Hospitality",
         company: { name: "RM Engine", logo: "ORM", },
         user: { name: "John Doe", initials: "JD", role: "Revenue Manager", },
         moduleNames: {
