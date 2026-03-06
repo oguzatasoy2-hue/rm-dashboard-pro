@@ -144,29 +144,27 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </div>
 
                 {/* User Profile Hook */}
-                <div className="px-6">
-                    <div className="flex items-center justify-between py-3 border-t border-white/[0.05]">
-                        <div className="flex items-center gap-3">
-                            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
-                                <span className="text-white text-xs font-semibold">{siteConfig.user.initials}</span>
-                            </div>
-                            <div>
-                                <p className="text-white text-xs font-medium">{siteConfig.user.name}</p>
-                                <p className="text-zinc-500 text-[10px]">{siteConfig.user.role}</p>
-                            </div>
+                <div className="flex items-center justify-between py-3 border-t border-white/[0.05]">
+                    <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
+                            <span className="text-white text-xs font-semibold">{siteConfig.user.initials}</span>
                         </div>
-                        <button
-                            onClick={handleLogout}
-                            className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-colors"
-                            title="Log Out"
-                        >
-                            <LogOut size={16} />
-                        </button>
+                        <div>
+                            <p className="text-white text-xs font-medium">{siteConfig.user.name}</p>
+                            <p className="text-zinc-500 text-[10px]">{siteConfig.user.role}</p>
+                        </div>
                     </div>
+                    <button
+                        onClick={handleLogout}
+                        className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-colors"
+                        title="Log Out"
+                    >
+                        <LogOut size={16} />
+                    </button>
                 </div>
-
-                <FeedbackForm isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
             </aside>
+
+            <FeedbackForm isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
         </>
     );
 }
