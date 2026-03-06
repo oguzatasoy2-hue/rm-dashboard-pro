@@ -75,6 +75,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                 href={item.href}
                                 onMouseEnter={() => setHoveredPath(item.href)}
                                 onMouseLeave={() => setHoveredPath(null)}
+                                onClick={() => onClose?.()}
                                 className="relative flex items-center gap-3 px-3 py-2.5 rounded-lg outline-none"
                             >
                                 {/* Highlight Background Indicator */}
