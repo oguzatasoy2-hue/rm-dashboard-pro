@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Download, Loader2, CalendarDays, Activity, TrendingUp, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
-import { generateForecastingData, type ForecastData } from "@/data/mock";
 import { siteConfig } from "@/config/site";
+import { apiClient, type ForecastDay } from "@/lib/api-client";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -24,15 +24,22 @@ const itemVariants = {
 };
 
 export default function ForecastingPage() {
-    const [data, setData] = useState<ForecastData[]>([]);
+    const [data, setData] = useState<ForecastDay[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setData(generateForecastingData());
-            setIsLoading(false);
-        }, 900);
-        return () => clearTimeout(timer);
+        async function fetchData() {
+            setIsLoading(true);
+            try {
+                const forecastData = await apiClient.getForecast();
+                setData(forecastData);
+            } catch (error) {
+                console.error("Failed to load forecast data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchData();
     }, []);
 
     if (isLoading) {

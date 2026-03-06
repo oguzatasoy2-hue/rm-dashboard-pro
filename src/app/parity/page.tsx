@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Activity, Search, AlertOctagon, TrendingDown, ArrowRight, Download, Loader2 } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
-import { generateParityData, type ParityData } from "@/data/mock";
 import { siteConfig } from "@/config/site";
+import { apiClient, type ParityScan } from "@/lib/api-client";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -24,15 +24,22 @@ const itemVariants = {
 };
 
 export default function ParityPage() {
-    const [data, setData] = useState<ParityData[]>([]);
+    const [data, setData] = useState<ParityScan[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setData(generateParityData());
-            setIsLoading(false);
-        }, 1100);
-        return () => clearTimeout(timer);
+        async function fetchData() {
+            setIsLoading(true);
+            try {
+                const parityData = await apiClient.getParityScans();
+                setData(parityData);
+            } catch (error) {
+                console.error("Failed to load parity data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchData();
     }, []);
 
     if (isLoading) {

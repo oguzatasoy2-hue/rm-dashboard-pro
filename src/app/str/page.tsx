@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Shield, TrendingUp, Users, Target, Loader2, MapPin } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
-import { strRadarData } from "@/data/mock";
 import { siteConfig } from "@/config/site";
+import { apiClient, type BenchmarkIndex } from "@/lib/api-client";
 
 // Linear/Vercel smooth acceleration curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -57,12 +57,22 @@ const CustomRadarTooltip = ({ active, payload }: CustomRadarTooltipProps) => {
 };
 
 export default function STRBenchmarkPage() {
+    const [data, setData] = useState<BenchmarkIndex[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Simulate API fetch delay
-        const timer = setTimeout(() => setIsLoading(false), 900);
-        return () => clearTimeout(timer);
+        async function fetchData() {
+            setIsLoading(true);
+            try {
+                const benchmarkData = await apiClient.getBenchmark();
+                setData(benchmarkData);
+            } catch (error) {
+                console.error("Failed to load benchmark data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchData();
     }, []);
 
     if (isLoading) {
@@ -101,7 +111,6 @@ export default function STRBenchmarkPage() {
                 </motion.div>
 
                 <ModuleInfo
-
                     utility="Analyze relative performance against the market (MPI, ARI, RGI indices)."
                     concrete="Radar chart comparing your property to the CompSet across three axes: Occupancy, Rate, and Revenue."
                     usage="An index < 1.00 means you are underperforming. Use this chart to identify whether your weak point is occupancy (MPI) or average rate (ARI)."
@@ -118,7 +127,9 @@ export default function STRBenchmarkPage() {
                             <Target size={14} className="text-green-400" />
                         </div>
                         <div className="flex items-baseline gap-2 mb-1">
-                            <span className="text-5xl font-semibold text-white tracking-tighter tabular-nums">1.09</span>
+                            <span className="text-5xl font-semibold text-white tracking-tighter tabular-nums">
+                                {data.find(d => d.subject === 'MPI')?.hotel.toFixed(2) || '1.09'}
+                            </span>
                         </div>
                         <p className="text-xs text-zinc-400 font-medium">Occ (Hotel) / Occ (CompSet)</p>
                         <div className="mt-4 flex items-center gap-1.5 border-t border-white/[0.05] pt-4">
@@ -135,7 +146,9 @@ export default function STRBenchmarkPage() {
                             <Shield size={14} className="text-primary" />
                         </div>
                         <div className="flex items-baseline gap-2 mb-1">
-                            <span className="text-5xl font-semibold text-white tracking-tighter tabular-nums">1.08</span>
+                            <span className="text-5xl font-semibold text-white tracking-tighter tabular-nums">
+                                {data.find(d => d.subject === 'ARI')?.hotel.toFixed(2) || '1.08'}
+                            </span>
                         </div>
                         <p className="text-xs text-zinc-400 font-medium">ADR (Hotel) / ADR (CompSet)</p>
                         <div className="mt-4 flex items-center gap-1.5 border-t border-white/[0.05] pt-4">
@@ -152,7 +165,9 @@ export default function STRBenchmarkPage() {
                             <Users size={14} className="text-green-400" />
                         </div>
                         <div className="flex items-baseline gap-2 mb-1">
-                            <span className="text-5xl font-semibold text-white tracking-tighter tabular-nums">1.17</span>
+                            <span className="text-5xl font-semibold text-white tracking-tighter tabular-nums">
+                                {data.find(d => d.subject === 'RGI')?.hotel.toFixed(2) || '1.17'}
+                            </span>
                         </div>
                         <p className="text-xs text-zinc-400 font-medium">RevPAR (Hotel) / RevPAR (CompSet)</p>
                         <div className="mt-4 flex items-center gap-1.5 border-t border-white/[0.05] pt-4">
@@ -181,21 +196,25 @@ export default function STRBenchmarkPage() {
                                     <span className="w-2 h-2 rounded-full bg-primary"></span>
                                     <span className="text-xs text-zinc-300 font-medium">Our Property</span>
                                 </div>
-                                <span className="text-xs text-white font-bold tabular-nums">84.0</span>
+                                <span className="text-xs text-white font-bold tabular-nums">
+                                    {(data.reduce((acc, curr) => acc + curr.hotel, 0) / (data.length || 1)).toFixed(1)}
+                                </span>
                             </div>
                             <div className="flex justify-between items-center pb-2">
                                 <div className="flex items-center gap-2">
                                     <span className="w-2 h-2 rounded-full bg-zinc-600"></span>
                                     <span className="text-xs text-zinc-500 font-medium">CompSet Avg</span>
                                 </div>
-                                <span className="text-xs text-zinc-400 font-bold tabular-nums">74.2</span>
+                                <span className="text-xs text-zinc-400 font-bold tabular-nums">
+                                    {(data.reduce((acc, curr) => acc + curr.compset, 0) / (data.length || 1)).toFixed(1)}
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     <div className="w-2/3 h-[380px]">
                         <ResponsiveContainer width="100%" height="100%">
-                            <RadarChart cx="50%" cy="50%" outerRadius="75%" data={strRadarData}>
+                            <RadarChart cx="50%" cy="50%" outerRadius="75%" data={data}>
                                 <PolarGrid stroke="rgba(255,255,255,0.05)" />
                                 <PolarAngleAxis
                                     dataKey="subject"

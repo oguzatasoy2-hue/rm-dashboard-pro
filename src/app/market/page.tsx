@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { CloudRain, Search, Calendar, MapPin, Loader2 } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
-import { generateMarketData } from "@/data/mock";
 import { siteConfig } from "@/config/site";
+import { apiClient, type MarketInsight } from "@/lib/api-client";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -70,12 +70,18 @@ export default function MarketInsightPage() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Simulate network delay
-        const timer = setTimeout(() => {
-            setData(generateMarketData());
-            setIsLoading(false);
-        }, 1000);
-        return () => clearTimeout(timer);
+        async function fetchData() {
+            setIsLoading(true);
+            try {
+                const insightData = await apiClient.getMarketInsight();
+                setData(insightData);
+            } catch (error) {
+                console.error("Failed to load market insight:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchData();
     }, []);
 
     if (isLoading) {

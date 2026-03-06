@@ -1,6 +1,8 @@
 /**
- * API Client Interface
+ * API Client Interface - Complete RM Suite
  */
+
+// --- Interfaces ---
 
 export interface MarketTrend {
     date: string;
@@ -23,6 +25,42 @@ export interface MarketData {
     };
 }
 
+export interface MarketInsight {
+    date: string;
+    searchVolume: number;
+    marketDemand: number;
+    hasEvent: boolean;
+}
+
+export interface ForecastDay {
+    date: string;
+    occupancy: number;
+    price: number;
+    wtp: number;
+    pace: number;
+    demand: "Low" | "Medium" | "High";
+    isWeekend: boolean;
+    event?: string;
+}
+
+export interface ParityScan {
+    id: number;
+    ota: string;
+    checkin: string;
+    directPrice: number;
+    otaPrice: number;
+    diffPerc: number;
+    diffAmount: number;
+    isUndercut: boolean;
+}
+
+export interface BenchmarkIndex {
+    subject: string;
+    hotel: number;
+    compset: number;
+    fullMark: number;
+}
+
 export interface Recommendation {
     id: string;
     category: string;
@@ -32,10 +70,36 @@ export interface Recommendation {
     actioned: boolean;
 }
 
+// --- Client ---
+
 export const apiClient = {
     async getMarketTrends(): Promise<MarketData> {
         const res = await fetch('/api/market/trends', { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch market trends');
+        return res.json();
+    },
+
+    async getMarketInsight(): Promise<MarketInsight[]> {
+        const res = await fetch('/api/market/insight', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch market insight');
+        return res.json();
+    },
+
+    async getForecast(): Promise<ForecastDay[]> {
+        const res = await fetch('/api/revenue/forecast', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch forecast');
+        return res.json();
+    },
+
+    async getParityScans(): Promise<ParityScan[]> {
+        const res = await fetch('/api/parity/scans', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch parity scans');
+        return res.json();
+    },
+
+    async getBenchmark(): Promise<BenchmarkIndex[]> {
+        const res = await fetch('/api/market/benchmark', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch benchmark data');
         return res.json();
     },
 
