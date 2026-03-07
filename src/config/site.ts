@@ -21,6 +21,8 @@ export const nichesInfo = {
             comparison: "Price Comparison",
             events: "Event Tracker",
             pulse: "Pouls Sémantique",
+            demand: "Demand Calendar",
+            negotiator: "Agent Négociateur",
         },
         kpis: {
             yieldVal1: "Our ADR (Base)",
@@ -35,6 +37,8 @@ export const nichesInfo = {
             parityUndercut: "OTA Undercut Risk",
             strDirect: "Direct Booking %",
             pulseSentiment: "Guest Sentiment Score",
+            demandVelocity: "Booking Velocity",
+            negotiatorStatus: "Auto-Dispute Status",
         }
     },
     saas: {
@@ -51,6 +55,8 @@ export const nichesInfo = {
             comparison: "Market Comparison",
             events: "Growth Events",
             pulse: "Signal Pulse",
+            demand: "Growth Calendar",
+            negotiator: "Churn Agent",
         },
         kpis: {
             yieldVal1: "Our ARPU (Avg Revenue Per User)",
@@ -81,6 +87,8 @@ export const nichesInfo = {
             comparison: "Price Pulse",
             events: "Promo Calendar",
             pulse: "Trend Pulse",
+            demand: "Inventory Heatmap",
+            negotiator: "Pricing Agent",
         },
         kpis: {
             yieldVal1: "Our AOV (Base Cart)",

@@ -140,6 +140,27 @@ export interface InvestmentItem {
     logic: string;
 }
 
+export interface DemandDay {
+    date: string;
+    demand: number;
+    velocity: number;
+    occupancy: number;
+    dayName: string;
+    dayNum: number;
+    isWeekend: boolean;
+}
+
+export interface NegotiationLog {
+    id: string;
+    ota: string;
+    status: "active" | "resolved" | "failed";
+    issue: string;
+    action: string;
+    result: string;
+    timestamp: string;
+    impact: string;
+}
+
 export interface MarketPulseData {
     readonly score: number;
     readonly trend: string;
@@ -153,65 +174,88 @@ export interface MarketPulseData {
     };
 }
 
+// --- Helpers ---
+
+const getBaseUrl = () => {
+    if (typeof window !== 'undefined') return '';
+    if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+    return `http://127.0.0.1:${process.env.PORT || 3000}`;
+};
+
+const BASE_URL = getBaseUrl();
+
 // --- Client ---
 
 export const apiClient = {
     async getMarketTrends(): Promise<MarketData> {
-        const res = await fetch('/api/market/trends', { cache: 'no-store' });
+        const res = await fetch(`${BASE_URL}/api/market/trends`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch market trends');
         return res.json();
     },
 
     async getMarketInsight(): Promise<MarketInsight[]> {
-        const res = await fetch('/api/market/insight', { cache: 'no-store' });
+        const res = await fetch(`${BASE_URL}/api/market/insight`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch market insight');
         return res.json();
     },
 
     async getForecast(): Promise<ForecastDay[]> {
-        const res = await fetch('/api/revenue/forecast', { cache: 'no-store' });
+        const res = await fetch(`${BASE_URL}/api/revenue/forecast`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch forecast');
         return res.json();
     },
 
     async getParityScans(): Promise<ParityScan[]> {
-        const res = await fetch('/api/parity/scans', { cache: 'no-store' });
+        const res = await fetch(`${BASE_URL}/api/parity/scans`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch parity scans');
         return res.json();
     },
 
     async getBenchmark(): Promise<BenchmarkIndex[]> {
-        const res = await fetch('/api/market/benchmark', { cache: 'no-store' });
+        const res = await fetch(`${BASE_URL}/api/market/benchmark`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch benchmark data');
         return res.json();
     },
 
     async getComparison(): Promise<ComparisonData> {
-        const res = await fetch('/api/market/comparison', { cache: 'no-store' });
+        const res = await fetch(`${BASE_URL}/api/market/comparison`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch comparison data');
         return res.json();
     },
 
     async getEvents(): Promise<MarketEventsResponse> {
-        const res = await fetch('/api/market/events', { cache: 'no-store' });
+        const res = await fetch(`${BASE_URL}/api/market/events`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch events data');
         return res.json();
     },
 
     async getPulse(): Promise<MarketPulseData> {
-        const res = await fetch('/api/market/pulse', { cache: 'no-store' });
+        const res = await fetch(`${BASE_URL}/api/market/pulse`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch pulse data');
         return res.json();
     },
 
     async getRecommendations(): Promise<Recommendation[]> {
-        const res = await fetch('/api/revenue/recommendations', { cache: 'no-store' });
+        const res = await fetch(`${BASE_URL}/api/revenue/recommendations`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch recommendations');
         return res.json();
     },
 
+    async getDemandCalendar(): Promise<DemandDay[]> {
+        const res = await fetch(`${BASE_URL}/api/market/demand`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch demand calendar');
+        return res.json();
+    },
+
+    async getNegotiations(): Promise<NegotiationLog[]> {
+        const res = await fetch(`${BASE_URL}/api/ai/negotiator`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch negotiations');
+        return res.json();
+    },
+
     async sendFeedback(data: Record<string, unknown>): Promise<{ success: boolean }> {
-        const res = await fetch('/api/feedback', {
+        const res = await fetch(`${BASE_URL}/api/feedback`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
