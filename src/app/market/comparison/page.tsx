@@ -341,65 +341,67 @@ export default function PriceComparisonPage() {
                                 </div>
                             </div>
 
-                            <div className="flex-1 w-full relative z-10" style={{ minHeight: '440px', height: '440px' }}>
-                                {isMounted && (
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <LineChart data={data.timeline} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
-                                            <CartesianGrid strokeDasharray="0 20" stroke="rgba(255,255,255,0.03)" vertical={false} />
-                                            <XAxis
-                                                dataKey="date"
-                                                axisLine={false}
-                                                tickLine={false}
-                                                tick={{ fill: '#71717A', fontSize: 11, fontWeight: 800 }}
-                                                dy={25}
-                                                tickFormatter={(val) => new Date(val).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
-                                            />
-                                            <YAxis
-                                                axisLine={false}
-                                                tickLine={false}
-                                                tick={{ fill: '#71717A', fontSize: 11, fontWeight: 800 }}
-                                                unit="€"
-                                                domain={['dataMin - 20', 'dataMax + 20']}
-                                                dx={-15}
-                                            />
-                                            <Tooltip
-                                                content={<CustomTooltip />}
-                                                cursor={{ stroke: 'rgba(255,255,255,0.04)', strokeWidth: 50 }}
-                                            />
+                            <div className="flex-1 w-full relative z-10 flex items-center justify-center pt-8" style={{ minHeight: '440px' }}>
+                                {isMounted && data && (
+                                    <LineChart
+                                        width={isSidebarOpen ? 760 : 1080}
+                                        height={400}
+                                        data={data.timeline}
+                                        margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#27272A" vertical={false} />
+                                        <XAxis
+                                            dataKey="date"
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fill: '#71717A', fontSize: 11, fontWeight: 700 }}
+                                            dy={20}
+                                            tickFormatter={(val) => new Date(val).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
+                                        />
+                                        <YAxis
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fill: '#71717A', fontSize: 11, fontWeight: 700 }}
+                                            unit="€"
+                                            domain={['dataMin - 10', 'auto']}
+                                            dx={-10}
+                                        />
+                                        <Tooltip
+                                            content={<CustomTooltip />}
+                                            cursor={{ stroke: '#27272A', strokeWidth: 1 }}
+                                        />
 
-                                            {/* Competitors (Dashed for Contrast) */}
-                                            {data.competitors.map((comp: any, idx: number) => (
-                                                <Line
-                                                    key={comp.name}
-                                                    name={comp.name}
-                                                    type="monotone"
-                                                    dataKey={comp.name}
-                                                    stroke={COMP_COLORS[idx]}
-                                                    strokeWidth={2.5}
-                                                    strokeDasharray="8 8"
-                                                    dot={false}
-                                                    activeDot={{ r: 4, strokeWidth: 0 }}
-                                                    opacity={activeCompetitors.includes(comp.name) ? 0.6 : 0}
-                                                    hide={!activeCompetitors.includes(comp.name)}
-                                                    connectNulls
-                                                    animationDuration={1500}
-                                                />
-                                            ))}
-
-                                            {/* Our Hotel (Solid & Thick & Glowing) */}
+                                        {/* Competitors */}
+                                        {data.competitors.map((comp: any, idx: number) => (
                                             <Line
-                                                name="Le Provençal"
+                                                key={comp.name}
+                                                name={comp.name}
                                                 type="monotone"
-                                                dataKey="provençal"
-                                                stroke="#3B82F6"
-                                                strokeWidth={6}
-                                                dot={{ r: 6, fill: '#3B82F6', strokeWidth: 3, stroke: '#0D0D0F' }}
-                                                activeDot={{ r: 10, strokeWidth: 4, stroke: 'rgba(59,130,246,0.3)', fill: '#FFF' }}
-                                                animationDuration={2500}
-                                                style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.6))' }}
+                                                dataKey={comp.name}
+                                                stroke={COMP_COLORS[idx]}
+                                                strokeWidth={2}
+                                                strokeDasharray="5 5"
+                                                dot={false}
+                                                activeDot={{ r: 4 }}
+                                                hide={!activeCompetitors.includes(comp.name)}
+                                                connectNulls
+                                                animationDuration={1000}
                                             />
-                                        </LineChart>
-                                    </ResponsiveContainer>
+                                        ))}
+
+                                        {/* Our Hotel */}
+                                        <Line
+                                            name="Le Provençal"
+                                            type="monotone"
+                                            dataKey="provençal"
+                                            stroke="#3B82F6"
+                                            strokeWidth={5}
+                                            dot={{ r: 4, fill: '#3B82F6', strokeWidth: 2, stroke: '#0D0D0F' }}
+                                            activeDot={{ r: 8, strokeWidth: 0, fill: '#FFF' }}
+                                            animationDuration={1500}
+                                        />
+                                    </LineChart>
+                                )}
                             </div>
                         </div>
 
