@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Target, LineChart, CalendarDays, Settings, Activity, PieChart, LogOut, MessageSquareHeart, Search, MapPin } from "lucide-react";
+import { Target, LineChart, CalendarDays, Settings, Activity, PieChart, LogOut, MessageSquareHeart, Search, MapPin, BrainCircuit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { LogoORM } from "@/components/LogoORM";
@@ -17,6 +17,7 @@ const NAV_ITEMS = [
     { name: siteConfig.moduleNames.market, href: "/market", icon: LineChart },
     { name: siteConfig.moduleNames.comparison, href: "/market/comparison", icon: Search },
     { name: siteConfig.moduleNames.events, href: "/market/events", icon: MapPin },
+    { name: siteConfig.moduleNames.pulse, href: "/market/pulse", icon: BrainCircuit },
     { name: siteConfig.moduleNames.forecast, href: "/forecast", icon: CalendarDays },
     { name: siteConfig.moduleNames.parity, href: "/parity", icon: Activity },
     { name: siteConfig.moduleNames.str, href: "/str", icon: PieChart },

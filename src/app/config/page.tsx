@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Settings, Save, MapPin, Building2, Key, Globe, Loader2, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Settings, Save, MapPin, Building2, Key, Globe, Loader2, CheckCircle2, Palmtree, ShieldCheck, Zap, BellOff } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
+import { cn } from "@/lib/utils";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -24,6 +25,7 @@ const itemVariants = {
 export default function ConfigPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [vacationMode, setVacationMode] = useState(false);
 
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault();
@@ -143,6 +145,85 @@ export default function ConfigPage() {
                                     ))}
                                 </div>
                                 <p className="text-xs text-zinc-500 mt-2">Adjusting the star rating will dynamically recompose the simulated competitor set pricing multipliers.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Section 4: AI Autonomy (Vacation Mode) */}
+                    <div className={cn(
+                        "bg-[#FFFFFF]/[0.02] border rounded-2xl overflow-hidden transition-all duration-500",
+                        vacationMode ? "border-blue-500/40 bg-blue-500/[0.03]" : "border-white/[0.05]"
+                    )}>
+                        <div className="border-b border-white/[0.05] bg-[#09090B] px-6 py-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <Palmtree size={16} className={cn(vacationMode ? "text-blue-400" : "text-primary")} />
+                                <h2 className="text-sm font-semibold text-white">AI Autonomy (Mode Vacances)</h2>
+                            </div>
+                            <div
+                                onClick={() => setVacationMode(!vacationMode)}
+                                className={cn(
+                                    "w-12 h-6 rounded-full p-1 cursor-pointer transition-colors duration-300",
+                                    vacationMode ? "bg-blue-600" : "bg-zinc-800"
+                                )}
+                            >
+                                <motion.div
+                                    animate={{ x: vacationMode ? 24 : 0 }}
+                                    className="w-4 h-4 bg-white rounded-full shadow-lg"
+                                />
+                            </div>
+                        </div>
+                        <div className="p-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-4">
+                                    <p className="text-xs text-zinc-500 leading-relaxed">
+                                        Activer ce mode permet à l'IA de RMpro de fixer les prix de manière autonome en votre absence.
+                                        L'intelligence applique une stratégie de "Rendement Sécurisé" avec des gardes-fous stricts.
+                                    </p>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                                            <ShieldCheck size={12} className="text-green-500" />
+                                            Safety Bounds: -5% / +10% max
+                                        </div>
+                                        <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                                            <BellOff size={12} className="text-blue-400" />
+                                            Mobile Notifications Silenced
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <AnimatePresence mode="wait">
+                                    {vacationMode ? (
+                                        <motion.div
+                                            key="auto"
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.95 }}
+                                            className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center gap-4"
+                                        >
+                                            <div className="relative">
+                                                <Zap size={24} className="text-blue-400 animate-pulse" />
+                                                <div className="absolute inset-0 bg-blue-400 blur-lg opacity-20 animate-pulse" />
+                                            </div>
+                                            <div>
+                                                <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-0.5">Statut: Autonome</p>
+                                                <p className="text-[10px] text-zinc-400 italic">"L'IA veille sur votre RevPAR."</p>
+                                            </div>
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div
+                                            key="manual"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 flex items-center gap-4 opacity-50"
+                                        >
+                                            <Settings size={24} className="text-zinc-600" />
+                                            <div>
+                                                <p className="text-xs font-bold text-zinc-600 uppercase tracking-widest mb-0.5">Statut: Manuel</p>
+                                                <p className="text-[10px] text-zinc-600">Validation humaine requise.</p>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </div>
                     </div>

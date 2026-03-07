@@ -20,6 +20,7 @@ export const nichesInfo = {
             str: "STR Benchmark",
             comparison: "Price Comparison",
             events: "Event Tracker",
+            pulse: "Pouls Sémantique",
         },
         kpis: {
             yieldVal1: "Our ADR (Base)",
@@ -33,6 +34,7 @@ export const nichesInfo = {
             forecastPace: "Booking Pace",
             parityUndercut: "OTA Undercut Risk",
             strDirect: "Direct Booking %",
+            pulseSentiment: "Guest Sentiment Score",
         }
     },
     saas: {
