@@ -122,19 +122,20 @@ export default function SemanticPulsePage() {
                                                 {pillar.delta > 0 ? '+' : ''}{pillar.delta} pts vs compset
                                             </span>
                                         </div>
-                                        <div className="h-2 w-full bg-white/[0.03] rounded-full overflow-hidden flex">
+                                        <div className="h-2 w-full bg-white/[0.03] rounded-full overflow-hidden relative">
+                                            {/* Competitor Average (Background) */}
                                             <div
-                                                className="h-full bg-primary/40 transition-all duration-1000"
+                                                className="h-full bg-white/[0.1] transition-all duration-1000"
                                                 style={{ width: `${pillar.comp_avg}%` }}
                                             />
+                                            {/* Our Score (Foreground) */}
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: `${pillar.our_score}%` }}
                                                 className={cn(
-                                                    "h-full absolute rounded-full transition-all duration-1000",
-                                                    pillar.delta > 0 ? "bg-primary" : "bg-red-500"
+                                                    "h-full absolute top-0 left-0 rounded-full transition-all duration-1000",
+                                                    pillar.delta > 0 ? "bg-primary shadow-[0_0_12px_rgba(234,197,79,0.3)]" : "bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.3)]"
                                                 )}
-                                                style={{ left: 0 }}
                                             />
                                         </div>
                                     </div>
