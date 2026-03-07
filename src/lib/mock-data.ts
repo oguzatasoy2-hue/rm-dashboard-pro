@@ -12,10 +12,10 @@ export const mockDataService = {
             date.setDate(date.getDate() - (7 - i));
             return {
                 date: date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
-                average_daily_rate: 60 + Math.random() * 20,
-                comp_set_adr: 55 + Math.random() * 15,
-                occupancy_rate: 70 + Math.random() * 25,
-                competitor_index: 0.9 + Math.random() * 0.2,
+                average_daily_rate: Math.round(60 + Math.random() * 20),
+                comp_set_adr: Math.round(55 + Math.random() * 15),
+                occupancy_rate: Math.round(70 + Math.random() * 25),
+                competitor_index: Number((0.9 + Math.random() * 0.2).toFixed(2)),
             };
         });
 
@@ -62,9 +62,9 @@ export const mockDataService = {
             return {
                 date: date.toISOString().split('T')[0],
                 occupancy: Math.floor(60 + Math.random() * 35),
-                price: 120 + Math.random() * 40,
-                wtp: 130 + Math.random() * 50,
-                pace: 0.8 + Math.random() * 0.4,
+                price: Math.round(120 + Math.random() * 40),
+                wtp: Math.round(130 + Math.random() * 50),
+                pace: Number((0.8 + Math.random() * 0.4).toFixed(2)),
                 demand,
                 isWeekend,
                 event: i === 5 ? "Local Festival" : undefined
@@ -114,11 +114,11 @@ export const mockDataService = {
             const d = date.toISOString().split('T')[0];
             return {
                 date: d,
-                provençal: 120 + Math.random() * 20,
-                "Hôtel de la Paix": 115 + Math.random() * 15,
-                "Grand Palais": 140 + Math.random() * 30,
-                "Petit Auberge": 90 + Math.random() * 10,
-                "Villa Riviera": 130 + Math.random() * 25
+                provençal: Math.round(120 + Math.random() * 20),
+                "Hôtel de la Paix": Math.round(115 + Math.random() * 15),
+                "Grand Palais": Math.round(140 + Math.random() * 30),
+                "Petit Auberge": Math.round(90 + Math.random() * 10),
+                "Villa Riviera": Math.round(130 + Math.random() * 25)
             };
         });
 
