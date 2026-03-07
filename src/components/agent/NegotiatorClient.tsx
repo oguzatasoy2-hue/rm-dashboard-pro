@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Bot, ShieldCheck, Zap, History, ExternalLink, ArrowUpRight, Scale, AlertCircle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NegotiationLog } from "@/lib/api-client";
+import ModuleInfo from "@/components/ModuleInfo";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
@@ -37,6 +38,7 @@ export default function NegotiatorClient({ data }: { data: NegotiationLog[] }) {
                                 <Bot size={24} className="text-primary" />
                             </div>
                             <h1 className="text-3xl font-semibold text-white tracking-tight">Agent Négociateur</h1>
+                            <span className="px-2 py-0.5 bg-primary/10 border border-primary/20 text-primary text-[8px] font-black uppercase tracking-[0.2em] rounded-sm">Premium</span>
                         </div>
                         <p className="text-zinc-500 text-sm max-w-lg">Autonomous parity enforcement. Detects OTAs undercuts and initiates automated contractual disputes.</p>
                     </div>
@@ -71,6 +73,14 @@ export default function NegotiatorClient({ data }: { data: NegotiationLog[] }) {
                             </button>
                         </div>
                     </div>
+                </motion.div>
+
+                <motion.div variants={itemVariants}>
+                    <ModuleInfo
+                        utility="Autonomous parity enforcement and dispute resolution."
+                        concrete="Real-time detection of price undercuts by OTAs and automated legal/contractual actions."
+                        usage="Let the agent handle OTA discrepancies in the background to recoup lost revenue and maintain direct price integrity."
+                    />
                 </motion.div>
 
                 {/* Stats Row */}

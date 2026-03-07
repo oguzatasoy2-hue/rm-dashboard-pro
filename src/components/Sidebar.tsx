@@ -18,12 +18,12 @@ const NAV_ITEMS = [
     { name: siteConfig.moduleNames.market, href: "/market", icon: LineChart },
     { name: siteConfig.moduleNames.comparison, href: "/market/comparison", icon: Search },
     { name: siteConfig.moduleNames.events, href: "/market/events", icon: MapPin },
-    { name: siteConfig.moduleNames.pulse, href: "/market/pulse", icon: BrainCircuit },
-    { name: siteConfig.moduleNames.demand, href: "/market/demand", icon: LayoutGrid },
-    { name: siteConfig.moduleNames.negotiator, href: "/ai/negotiator", icon: Bot },
+    { name: siteConfig.moduleNames.pulse, href: "/market/pulse", icon: BrainCircuit, isPremium: true },
+    { name: siteConfig.moduleNames.demand, href: "/market/demand", icon: LayoutGrid, isPremium: true },
+    { name: siteConfig.moduleNames.negotiator, href: "/ai/negotiator", icon: Bot, isPremium: true },
     { name: siteConfig.moduleNames.forecast, href: "/forecast", icon: CalendarDays },
     { name: siteConfig.moduleNames.parity, href: "/parity", icon: Activity },
-    { name: siteConfig.moduleNames.str, href: "/str", icon: PieChart },
+    { name: siteConfig.moduleNames.str, href: "/str", icon: PieChart, isPremium: true },
     { name: "Configuration", href: "/config", icon: Settings },
 ];
 
@@ -126,6 +126,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                         animate={{ scale: 1 }}
                                         className="absolute right-3 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)] z-10"
                                     />
+                                )}
+
+                                {item.isPremium && !isActive && (
+                                    <div className="absolute right-3 px-1.5 py-0.5 rounded-[4px] bg-primary/10 border border-primary/20">
+                                        <span className="text-[7px] font-black text-primary uppercase tracking-widest">PRO</span>
+                                    </div>
                                 )}
                             </Link>
                         );

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Info, TrendingUp, Users, Calendar, ArrowRight, Zap, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { DemandDay } from "@/lib/api-client";
+import ModuleInfo from "@/components/ModuleInfo";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
@@ -44,6 +45,7 @@ export default function DemandClient({ data }: { data: DemandDay[] }) {
                                 <Calendar size={20} className="text-primary" />
                             </div>
                             <h1 className="text-3xl font-semibold text-white tracking-tight">Demand Calendar</h1>
+                            <span className="px-2 py-0.5 bg-primary/10 border border-primary/20 text-primary text-[8px] font-black uppercase tracking-[0.2em] rounded-sm">Premium</span>
                         </div>
                         <p className="text-zinc-500 text-sm">Visualize booking velocity and inventory pressure over the next 35 days.</p>
                     </div>
@@ -61,6 +63,14 @@ export default function DemandClient({ data }: { data: DemandDay[] }) {
                             <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">High (Peak)</span>
                         </div>
                     </div>
+                </motion.div>
+
+                <motion.div variants={itemVariants}>
+                    <ModuleInfo
+                        utility="Predictive modeling of future occupancy and rate pressure."
+                        concrete="Dashboard showing demand forecasts (Velocity) based on your current booking pace."
+                        usage="Anticipate low-activity periods to launch targeted promotions before your inventory becomes perishable."
+                    />
                 </motion.div>
 
                 <div className="grid grid-cols-12 gap-8">
