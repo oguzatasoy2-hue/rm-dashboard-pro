@@ -16,9 +16,9 @@ function ForecastLoading() {
 }
 
 async function ForecastDataWrapper() {
-    let data: ForecastDay[];
+    let forecastData: ForecastDay[];
     try {
-        data = mockDataService.getForecast();
+        forecastData = await mockDataService.getForecast();
     } catch (err) {
         console.error("Failed to load forecast data:", err);
         return (
@@ -27,7 +27,7 @@ async function ForecastDataWrapper() {
             </div>
         );
     }
-    return <ForecastClient data={data} />;
+    return <ForecastClient data={forecastData} />;
 }
 
 export default function ForecastingPage() {

@@ -1,4 +1,5 @@
 import { MarketInsight, ForecastDay, ParityScan, BenchmarkIndex, ComparisonData, MarketEventsResponse, MarketPulseData, DemandDay, NegotiationLog, Recommendation, MarketData } from "./api-client";
+import prisma from "./db";
 
 /**
  * Mock Data Service
@@ -51,7 +52,34 @@ export const mockDataService = {
         });
     },
 
-    getForecast(): ForecastDay[] {
+    async getForecast(): Promise<ForecastDay[]> {
+        try {
+            const forecasts = await prisma.forecastDay.findMany({
+                where: { hotelId: 'provencal-1' },
+                orderBy: { date: 'asc' },
+                take: 14
+            });
+
+            if (forecasts.length === 0) return this.getMockForecast();
+
+            return forecasts.map(f => ({
+                date: f.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                fullDate: f.date.toISOString().split('T')[0],
+                occupancy: f.occupancy,
+                price: Math.round(f.price),
+                wtp: Math.round(f.wtp),
+                pace: f.pace,
+                demand: f.demand as "Low" | "Medium" | "High",
+                isWeekend: f.isWeekend,
+                event: f.event || undefined
+            }));
+        } catch (error) {
+            console.error("DB Error (getForecast):", error);
+            return this.getMockForecast();
+        }
+    },
+
+    getMockForecast(): ForecastDay[] {
         return Array.from({ length: 14 }, (_, i) => {
             const date = new Date();
             date.setDate(date.getDate() + i);
@@ -60,7 +88,8 @@ export const mockDataService = {
             const demand: "Low" | "Medium" | "High" = isWeekend ? "High" : (dayOfWeek === 5 ? "Medium" : "Low");
 
             return {
-                date: date.toISOString().split('T')[0],
+                date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                fullDate: date.toISOString().split('T')[0],
                 occupancy: Math.floor(60 + Math.random() * 35),
                 price: Math.round(120 + Math.random() * 40),
                 wtp: Math.round(130 + Math.random() * 50),
@@ -201,7 +230,32 @@ export const mockDataService = {
         };
     },
 
-    getDemandCalendar(): DemandDay[] {
+    async getDemandCalendar(): Promise<DemandDay[]> {
+        try {
+            const days = await prisma.demandDay.findMany({
+                where: { hotelId: 'provencal-1' },
+                orderBy: { date: 'asc' },
+                take: 35
+            });
+
+            if (days.length === 0) return this.getMockDemandCalendar();
+
+            return days.map(d => ({
+                date: d.date.toISOString().split('T')[0],
+                demand: d.demand,
+                velocity: d.velocity || 0,
+                occupancy: d.occupancy,
+                dayName: d.date.toLocaleDateString('en-US', { weekday: 'short' }),
+                dayNum: d.date.getDate(),
+                isWeekend: d.isWeekend
+            }));
+        } catch (error) {
+            console.error("DB Error (getDemandCalendar):", error);
+            return this.getMockDemandCalendar();
+        }
+    },
+
+    getMockDemandCalendar(): DemandDay[] {
         const days = 35;
         return Array.from({ length: days }, (_, i) => {
             const date = new Date();
@@ -225,7 +279,32 @@ export const mockDataService = {
         });
     },
 
-    getNegotiations(): NegotiationLog[] {
+    async getNegotiations(): Promise<NegotiationLog[]> {
+        try {
+            const logs = await prisma.negotiation.findMany({
+                where: { hotelId: 'provencal-1' },
+                orderBy: { timestamp: 'desc' }
+            });
+
+            if (logs.length === 0) return this.getMockNegotiations();
+
+            return logs.map(l => ({
+                id: l.id,
+                ota: l.ota,
+                status: (l.status === "pending" ? "active" : l.status) as "resolved" | "active" | "failed",
+                issue: l.issue,
+                action: l.action,
+                result: l.result || "",
+                impact: l.impact || "",
+                timestamp: l.timestamp.toISOString()
+            }));
+        } catch (error) {
+            console.error("DB Error (getNegotiations):", error);
+            return this.getMockNegotiations();
+        }
+    },
+
+    getMockNegotiations(): NegotiationLog[] {
         return [
             {
                 id: "NEG-001",

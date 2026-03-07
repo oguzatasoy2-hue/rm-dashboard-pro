@@ -18,7 +18,7 @@ function NegotiatorLoading() {
 async function NegotiatorDataWrapper() {
     let data: NegotiationLog[];
     try {
-        data = mockDataService.getNegotiations();
+        data = await mockDataService.getNegotiations();
     } catch (err) {
         console.error("Failed to load negotiator logs:", err);
         return (

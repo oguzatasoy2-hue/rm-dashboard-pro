@@ -18,7 +18,7 @@ function DemandLoading() {
 async function DemandDataWrapper() {
     let data: DemandDay[];
     try {
-        data = mockDataService.getDemandCalendar();
+        data = await mockDataService.getDemandCalendar();
     } catch (err) {
         console.error("Failed to load demand calendar:", err);
         return (

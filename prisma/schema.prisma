@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model Hotel {
+  id           String        @id @default(cuid())
+  name         String
+  city         String
+  currency     String        @default("€")
+  lastSync     DateTime      @default(now())
+  negotiations Negotiation[]
+  demandData   DemandDay[]
+  forecasts    ForecastDay[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model DemandDay {
+  id        String   @id @default(cuid())
+  hotelId   String
+  hotel     Hotel    @relation(fields: [hotelId], references: [id])
+  date      DateTime
+  demand    Int
+  velocity  Int?
+  occupancy Int
+  isWeekend Boolean
+  createdAt DateTime @default(now())
+
+  @@unique([hotelId, date])
+}
+
+model ForecastDay {
+  id        String   @id @default(cuid())
+  hotelId   String
+  hotel     Hotel    @relation(fields: [hotelId], references: [id])
+  date      DateTime
+  occupancy Int
+  price     Float
+  wtp       Float
+  pace      Float
+  demand    String   // "Low", "Medium", "High"
+  event     String?
+  isWeekend Boolean
+  createdAt DateTime @default(now())
+
+  @@unique([hotelId, date])
+}
+
+model Negotiation {
+  id        String   @id @default(cuid())
+  hotelId   String
+  hotel     Hotel    @relation(fields: [hotelId], references: [id])
+  ota       String
+  status    String   // "resolved", "active", "pending"
+  issue     String
+  action    String
+  result    String?
+  impact    String?
+  timestamp DateTime @default(now())
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("hotelier")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
