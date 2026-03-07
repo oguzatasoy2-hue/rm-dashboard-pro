@@ -14,10 +14,12 @@ function MarketLoading() {
     );
 }
 
+import { mockDataService } from "@/lib/mock-data";
+
 async function MarketDataWrapper() {
-    let data: unknown[];
+    let data: Record<string, unknown>[];
     try {
-        data = await apiClient.getMarketInsight() as unknown[];
+        data = mockDataService.getMarketInsight() as unknown as Record<string, unknown>[];
     } catch (err) {
         console.error("Failed to load market insight:", err);
         return (

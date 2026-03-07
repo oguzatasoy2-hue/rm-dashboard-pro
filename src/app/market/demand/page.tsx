@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import DemandClient from "@/components/market/DemandClient";
-import { apiClient, type DemandDay } from "@/lib/api-client";
+import { type DemandDay } from "@/lib/api-client";
+import { mockDataService } from "@/lib/mock-data";
 
 function DemandLoading() {
     return (
@@ -15,18 +16,18 @@ function DemandLoading() {
 }
 
 async function DemandDataWrapper() {
-    let data;
+    let data: DemandDay[];
     try {
-        data = await apiClient.getDemandCalendar();
+        data = mockDataService.getDemandCalendar();
     } catch (err) {
         console.error("Failed to load demand calendar:", err);
         return (
             <div className="w-full h-full flex items-center justify-center bg-[#09090B] text-zinc-500">
-                <p className="text-sm">Failed to load demand data. AI models are recalibrating.</p>
+                <p className="text-sm">Failed to load demand calendar. Please try again later.</p>
             </div>
         );
     }
-    return <DemandClient data={data as unknown as DemandDay[]} />;
+    return <DemandClient data={data} />;
 }
 
 export default function DemandCalendarPage() {

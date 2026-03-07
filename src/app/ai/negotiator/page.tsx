@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import NegotiatorClient from "@/components/agent/NegotiatorClient";
-import { apiClient, type NegotiationLog } from "@/lib/api-client";
+import { type NegotiationLog } from "@/lib/api-client";
+import { mockDataService } from "@/lib/mock-data";
 
 function NegotiatorLoading() {
     return (
@@ -15,18 +16,18 @@ function NegotiatorLoading() {
 }
 
 async function NegotiatorDataWrapper() {
-    let data;
+    let data: NegotiationLog[];
     try {
-        data = await apiClient.getNegotiations();
+        data = mockDataService.getNegotiations();
     } catch (err) {
         console.error("Failed to load negotiator logs:", err);
         return (
             <div className="w-full h-full flex items-center justify-center bg-[#09090B] text-zinc-500">
-                <p className="text-sm">Negotiator offline. Checking OTA secure protocols...</p>
+                <p className="text-sm">Failed to load negotiator logs. Please try again later.</p>
             </div>
         );
     }
-    return <NegotiatorClient data={data as NegotiationLog[]} />;
+    return <NegotiatorClient data={data} />;
 }
 
 export default function NegotiatorPage() {

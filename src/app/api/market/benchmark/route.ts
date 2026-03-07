@@ -1,19 +1,9 @@
 import { NextResponse } from 'next/server';
+import { mockDataService } from '@/lib/mock-data';
 
-/**
- * API Endpoint: /api/market/benchmark (STR)
- */
 export async function GET() {
     try {
-        const benchmarkData = [
-            { subject: 'Occupancy', hotel: 82, compset: 75, fullMark: 100 },
-            { subject: 'ADR', hotel: 94, compset: 85, fullMark: 100 },
-            { subject: 'RevPAR', hotel: 88, compset: 72, fullMark: 100 },
-            { subject: 'MPI', hotel: 109, compset: 100, fullMark: 120 },
-            { subject: 'ARI', hotel: 110, compset: 100, fullMark: 120 },
-            { subject: 'RGI', hotel: 120, compset: 100, fullMark: 130 },
-        ];
-
+        const benchmarkData = mockDataService.getBenchmark();
         return NextResponse.json(benchmarkData, { status: 200 });
     } catch {
         return NextResponse.json({ error: "Failed to fetch benchmark data" }, { status: 500 });

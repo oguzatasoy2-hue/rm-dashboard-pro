@@ -14,10 +14,12 @@ function STRLoading() {
     );
 }
 
+import { mockDataService } from "@/lib/mock-data";
+
 async function STRDataWrapper() {
-    let data: unknown[];
+    let data: BenchmarkIndex[];
     try {
-        data = await apiClient.getBenchmark() as unknown[];
+        data = mockDataService.getBenchmark();
     } catch (error) {
         console.error("Failed to load benchmark data:", error);
         return (
