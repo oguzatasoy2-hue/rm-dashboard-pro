@@ -9,15 +9,12 @@ import {
   Zap,
   RefreshCw,
   BarChart3,
-  Search,
   CheckCircle,
   ExternalLink,
-  ChevronRight,
   Smartphone,
   Cpu,
   Waves,
-  Star,
-  Quote
+  Star
 } from 'lucide-react';
 import Link from 'next/link';
 import { LogoORM } from '@/components/LogoORM';
@@ -79,14 +76,6 @@ const MODULES = [
   }
 ];
 
-const FEATURES = [
-  { icon: BarChart3, title: "Yield Management", desc: "Automated price suggestions based on real-time market pressure and compset positioning." },
-  { icon: Zap, title: "Instant Insights", desc: "Zero-latency dashboard updates. See the impact of market changes the moment they happen." },
-  { icon: Shield, title: "Parity Protection", desc: "Protect your bottom line by identifying OTA undercutting before it costs you bookings." },
-  { icon: Layers, title: "Unified Dashboard", desc: "All your revenue data in one immersive, bento-grid interface. No more tab-switching." },
-  { icon: RefreshCw, title: "Automated Reports", desc: "Daily, weekly, and monthly performance reports delivered straight to your inbox." },
-  { icon: Star, title: "STR Integration", desc: "Seamlessly import and visualize your STR data alongside your internal RM metrics." },
-];
 
 const PRICING = [
   {
@@ -180,7 +169,7 @@ export default function Home() {
           </h1>
 
           <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-            Optimize your hotel's performance with real-time analytics. Anticipate market demand, automate pricing, and maximize RevPAR with one unified tool.
+            {"Optimize your hotel's performance with real-time analytics. Anticipate market demand, automate pricing, and maximize RevPAR with one unified tool."}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -477,7 +466,7 @@ export default function Home() {
             </div>
             <h3 className="text-lg font-semibold text-white mb-2">Smart Forecasting</h3>
             <p className="text-sm text-zinc-500 leading-relaxed">
-              Pace-based predictive models tailored to your property's specific patterns.
+              {"Pace-based predictive models tailored to your property's specific patterns."}
             </p>
           </motion.div>
 
@@ -522,7 +511,7 @@ export default function Home() {
             <div className="relative z-10">
               <h3 className="text-xl font-bold text-white mb-2">Market Insight</h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
-                Don't just react to the market—predict it. Flight searches and local event demand integrated directly into your pricing logic.
+                {"Don't just react to the market—predict it. Flight searches and local event demand integrated directly into your pricing logic."}
               </p>
             </div>
           </motion.div>
@@ -578,7 +567,7 @@ export default function Home() {
             </div>
             <h3 className="text-2xl font-bold text-white mb-4">AI Autopilot</h3>
             <p className="text-zinc-400 text-sm leading-relaxed mb-8">
-              A co-pilot that doesn't just suggest—it acts. When confidence scores hit 95%, the system can automatically push rate updates to your PMS. Zero-touch RM.
+              {"A co-pilot that doesn't just suggest—it acts. When confidence scores hit 95%, the system can automatically push rate updates to your PMS. Zero-touch RM."}
             </p>
             <div className="flex items-center justify-center sm:justify-start gap-2 text-[#00F2FE] text-xs font-bold uppercase tracking-wider group-hover:gap-3 transition-all">
               Alpha Testing <ArrowRight size={14} />
@@ -628,7 +617,7 @@ export default function Home() {
               {[1, 2, 3, 4, 5].map((s) => <Star key={s} size={14} className="fill-[#EAC54F] text-[#EAC54F]" />)}
             </div>
             <blockquote className="text-zinc-300 leading-relaxed mb-8">
-              "ORMpro has completely transformed how we handle our weekend rates. The Yield Engine is scary accurate."
+              {"\"ORMpro has completely transformed how we handle our weekend rates. The Yield Engine is scary accurate.\""}
             </blockquote>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-zinc-800 border border-white/10" />
@@ -650,7 +639,7 @@ export default function Home() {
               {[1, 2, 3, 4, 5].map((s) => <Star key={s} size={14} className="fill-[#EAC54F] text-[#EAC54F]" />)}
             </div>
             <blockquote className="text-zinc-300 leading-relaxed mb-8">
-              "Finally, a tool that shows parity breaches in real-time without having to refresh 10 different OTA extranets."
+              {"\"Finally, a tool that shows parity breaches in real-time without having to refresh 10 different OTA extranets.\""}
             </blockquote>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-zinc-800 border border-white/10" />
@@ -672,7 +661,7 @@ export default function Home() {
               {[1, 2, 3, 4, 5].map((s) => <Star key={s} size={14} className="fill-[#EAC54F] text-[#EAC54F]" />)}
             </div>
             <blockquote className="text-zinc-300 leading-relaxed mb-8">
-              "The interface is so much better than IDeaS or Duetto. My team actually enjoys using it every morning."
+              {"\"The interface is so much better than IDeaS or Duetto. My team actually enjoys using it every morning.\""}
             </blockquote>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-zinc-800 border border-white/10" />

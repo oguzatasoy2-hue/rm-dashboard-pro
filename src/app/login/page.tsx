@@ -38,10 +38,10 @@ export default function LoginPage() {
                 setError(result.error || "Authentication failed");
                 setIsSubmitting(false);
             }
-        } catch (err) {
-            setError("A server error occurred. Please try again.");
-            setIsSubmitting(false);
+        } catch {
+            setError("Authentication failed. Server is unresponsive.");
         }
+        setIsSubmitting(false);
     };
 
     return (

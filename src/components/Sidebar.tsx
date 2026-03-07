@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Target, LineChart, CalendarDays, Settings, Activity, PieChart, LogOut, MessageSquareHeart, Search, MapPin, BrainCircuit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { LogoORM } from "@/components/LogoORM";
 import FeedbackForm from "@/components/FeedbackForm";
+import { logout } from "@/app/actions";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
@@ -31,13 +32,11 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     const pathname = usePathname();
-    const router = useRouter();
     const [hoveredPath, setHoveredPath] = useState<string | null>(null);
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
-    const handleLogout = () => {
-        document.cookie = "rm_pro_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        router.push("/login");
+    const handleLogout = async () => {
+        await logout();
     };
 
     return (
@@ -147,7 +146,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </div>
 
                 {/* User Profile Hook */}
-                <div className="flex items-center justify-between py-3 border-t border-white/[0.05]">
+                <div className="flex items-center justify-between py-3 px-4 border-t border-white/[0.05]">
                     <div className="flex items-center gap-3">
                         <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
                             <span className="text-white text-xs font-semibold">{siteConfig.user.initials}</span>

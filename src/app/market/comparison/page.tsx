@@ -1,18 +1,16 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
-    LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
-    CartesianGrid, Legend, Area, AreaChart
+    LineChart, Line, XAxis, YAxis, Tooltip,
+    CartesianGrid
 } from "recharts";
+import type { TooltipProps } from "recharts";
 import {
-    Search, Loader2, ArrowUpRight, TrendingUp, Info,
-    BarChart3, Target, LayoutGrid, Check, Plus, Hotel,
-    ChevronDown, Filter, Zap, ChevronLeft, ChevronRight,
-    Maximize2, Minimize2, Activity, Globe, Compass
+    Loader2, Check, Activity, Globe
 } from "lucide-react";
-import { apiClient } from "@/lib/api-client";
+import { apiClient, type ComparisonData } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -29,11 +27,15 @@ const itemVariants = {
 
 // Precision Palette (Navy/Blue/Cyber)
 const COMP_COLORS = ["#60A5FA", "#34D399", "#FBBF24", "#F87171", "#A78BFA"];
-const PRIMARY_BLUE = "#3B82F6";
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-        const ourPrice = payload.find((p: any) => p.dataKey === "provençal")?.value;
+interface CustomTooltipProps extends TooltipProps<number, string> {
+    active?: boolean;
+    payload?: { value: number; name: string; color: string; dataKey?: string | number }[];
+    label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+    if (active && payload && payload.length && label) {
         return (
             <div className="bg-[#09090B] border border-white/10 rounded-xl p-4 shadow-2xl backdrop-blur-xl min-w-[200px]">
                 <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
@@ -43,14 +45,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                     <Activity size={10} className="text-blue-500" />
                 </div>
                 <div className="space-y-2">
-                    {payload.sort((a: any, b: any) => b.value - a.value).map((entry: any, index: number) => {
+                    {[...payload].sort((a, b) => (b.value || 0) - (a.value || 0)).map((entry, index) => {
                         const isPrimary = entry.dataKey === "provençal";
                         return (
                             <div key={index} className="flex items-center justify-between gap-4">
                                 <div className="flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: entry.color }} />
                                     <span className={cn("text-[11px] font-medium", isPrimary ? "text-white" : "text-zinc-500")}>
-                                        {isPrimary ? "Le Provençal" : entry.name.split(' ')[0]}
+                                        {isPrimary ? "Le Provençal" : (entry.name?.split(' ')[0] || "Comp")}
                                     </span>
                                 </div>
                                 <span className={cn("text-[11px] font-bold tabular-nums", isPrimary ? "text-blue-400" : "text-white")}>
@@ -67,7 +69,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function PriceComparisonPage() {
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<ComparisonData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [activeCompetitors, setActiveCompetitors] = useState<string[]>([]);
     const [isMounted, setIsMounted] = useState(false);
@@ -88,7 +90,7 @@ export default function PriceComparisonPage() {
             try {
                 const comparisonData = await apiClient.getComparison();
                 setData(comparisonData);
-                setActiveCompetitors(comparisonData.competitors.map((c: any) => c.name));
+                setActiveCompetitors(comparisonData.competitors.map(c => c.name));
             } catch (error) {
                 console.error("Failed to fetch comparison data:", error);
             } finally {
@@ -106,7 +108,7 @@ export default function PriceComparisonPage() {
         );
     };
 
-    if (isLoading || !isMounted) {
+    if (isLoading || !isMounted || !data) {
         return (
             <div className="w-full h-full flex items-center justify-center bg-[#09090B]">
                 <div className="flex flex-col items-center gap-4">
@@ -165,7 +167,7 @@ export default function PriceComparisonPage() {
                     <div className="px-4 py-2 border-r border-white/10 mr-2">
                         <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Active CompSet</span>
                     </div>
-                    {data.competitors.map((comp: any, idx: number) => {
+                    {data.competitors.map((comp, idx) => {
                         const isActive = activeCompetitors.includes(comp.name);
                         return (
                             <button
@@ -188,7 +190,7 @@ export default function PriceComparisonPage() {
                         );
                     })}
                     <button
-                        onClick={() => setActiveCompetitors(data.competitors.map((c: any) => c.name))}
+                        onClick={() => setActiveCompetitors(data.competitors.map(c => c.name))}
                         className="ml-auto px-6 py-2.5 bg-zinc-900 border border-white/5 rounded-xl text-[9px] font-black text-zinc-400 uppercase tracking-widest hover:bg-zinc-800 transition-colors"
                     >
                         Reset Views
@@ -229,73 +231,71 @@ export default function PriceComparisonPage() {
                         </div>
 
                         <div className="flex-1 w-full relative z-10 flex items-center justify-center -ml-6" style={{ height: '400px' }}>
-                            {data && (
-                                <LineChart
-                                    width={chartWidth}
-                                    height={420}
-                                    data={data.timeline}
-                                    margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
-                                >
-                                    <CartesianGrid strokeDasharray="0 40" stroke="#1F1F23" vertical={true} horizontal={false} />
-                                    <XAxis
-                                        dataKey="date"
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: '#3F3F46', fontSize: 11, fontWeight: 700 }}
-                                        dy={25}
-                                        tickFormatter={(val) => new Date(val).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
-                                    />
-                                    <YAxis
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: '#3F3F46', fontSize: 11, fontWeight: 700 }}
-                                        unit="€"
-                                        domain={['dataMin - 20', 'auto']}
-                                        dx={-15}
-                                    />
-                                    <Tooltip
-                                        content={<CustomTooltip />}
-                                        cursor={{ stroke: 'rgba(59,130,246,0.1)', strokeWidth: 80 }}
-                                    />
+                            <LineChart
+                                width={chartWidth}
+                                height={420}
+                                data={data.timeline}
+                                margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
+                            >
+                                <CartesianGrid strokeDasharray="0 40" stroke="#1F1F23" vertical={true} horizontal={false} />
+                                <XAxis
+                                    dataKey="date"
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tick={{ fill: '#3F3F46', fontSize: 11, fontWeight: 700 }}
+                                    dy={25}
+                                    tickFormatter={(val) => new Date(val).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
+                                />
+                                <YAxis
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tick={{ fill: '#3F3F46', fontSize: 11, fontWeight: 700 }}
+                                    unit="€"
+                                    domain={['dataMin - 20', 'auto']}
+                                    dx={-15}
+                                />
+                                <Tooltip
+                                    content={<CustomTooltip />}
+                                    cursor={{ stroke: 'rgba(59,130,246,0.1)', strokeWidth: 80 }}
+                                />
 
-                                    {/* Competitors - Precision Lines */}
-                                    {data.competitors.map((comp: any, idx: number) => (
-                                        <Line
-                                            key={comp.name}
-                                            name={comp.name}
-                                            type="monotone"
-                                            dataKey={comp.name}
-                                            stroke={COMP_COLORS[idx]}
-                                            strokeWidth={2}
-                                            strokeDasharray="4 4"
-                                            dot={false}
-                                            activeDot={{ r: 4, strokeWidth: 0 }}
-                                            hide={!activeCompetitors.includes(comp.name)}
-                                            connectNulls
-                                            animationDuration={1000}
-                                        />
-                                    ))}
-
-                                    {/* Primary Hotel - Ultra Bold & Glow */}
+                                {/* Competitors - Precision Lines */}
+                                {data.competitors.map((comp, idx) => (
                                     <Line
-                                        name="Le Provençal"
+                                        key={comp.name}
+                                        name={comp.name}
                                         type="monotone"
-                                        dataKey="provençal"
-                                        stroke="#3B82F6"
-                                        strokeWidth={6}
-                                        dot={{ r: 5, fill: '#3B82F6', strokeWidth: 3, stroke: '#0D0D0F' }}
-                                        activeDot={{ r: 10, strokeWidth: 4, stroke: 'rgba(59,130,246,0.2)', fill: '#FFF' }}
-                                        animationDuration={1500}
-                                        style={{ filter: 'drop-shadow(0 0 12px rgba(59,130,246,0.4))' }}
+                                        dataKey={comp.name}
+                                        stroke={COMP_COLORS[idx]}
+                                        strokeWidth={2}
+                                        strokeDasharray="4 4"
+                                        dot={false}
+                                        activeDot={{ r: 4, strokeWidth: 0 }}
+                                        hide={!activeCompetitors.includes(comp.name)}
+                                        connectNulls
+                                        animationDuration={1000}
                                     />
-                                </LineChart>
-                            )}
+                                ))}
+
+                                {/* Primary Hotel - Ultra Bold & Glow */}
+                                <Line
+                                    name="Le Provençal"
+                                    type="monotone"
+                                    dataKey="provençal"
+                                    stroke="#3B82F6"
+                                    strokeWidth={6}
+                                    dot={{ r: 5, fill: '#3B82F6', strokeWidth: 3, stroke: '#0D0D0F' }}
+                                    activeDot={{ r: 10, strokeWidth: 4, stroke: 'rgba(59,130,246,0.2)', fill: '#FFF' }}
+                                    animationDuration={1500}
+                                    style={{ filter: 'drop-shadow(0 0 12px rgba(59,130,246,0.4))' }}
+                                />
+                            </LineChart>
                         </div>
                     </div>
 
                     {/* TACTICAL GRID */}
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-                        <div className="lg:col-span-4 bg-[#white/[0.02]] border border-white/[0.05] rounded-3xl p-10 flex flex-col justify-between group">
+                        <div className="lg:col-span-4 bg-white/[0.02] border border-white/[0.05] rounded-3xl p-10 flex flex-col justify-between group">
                             <div>
                                 <h4 className="text-xl font-black text-white tracking-tight uppercase mb-6">Strategic Gap</h4>
                                 <p className="text-zinc-500 text-sm leading-relaxed mb-10 font-medium">
@@ -339,8 +339,8 @@ export default function PriceComparisonPage() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-white/[0.02]">
-                                        {data.timeline.slice(0, 7).map((day: any, i: number) => {
-                                            const mAvg = data.competitors.reduce((acc: number, c: any) => acc + day[c.name], 0) / data.competitors.length;
+                                        {data.timeline.slice(0, 7).map((day, i) => {
+                                            const mAvg = data.competitors.reduce((acc, c) => acc + (day[c.name] as number), 0) / data.competitors.length;
                                             const gap = ((day.provençal - mAvg) / mAvg) * 100;
                                             return (
                                                 <tr key={i} className="hover:bg-white/[0.01] transition-colors">

@@ -34,7 +34,7 @@ export async function GET() {
         };
 
         return NextResponse.json(marketData, { status: 200 });
-    } catch (error) {
-        return NextResponse.json({ error: "Failed to fetch trends" }, { status: 500 });
+    } catch {
+        return NextResponse.json({ error: "Failed to fetch recommendations" }, { status: 500 });
     }
 }

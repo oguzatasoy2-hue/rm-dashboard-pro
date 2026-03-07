@@ -23,7 +23,7 @@ export async function GET() {
         ];
 
         return NextResponse.json(insightData, { status: 200 });
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: "Failed to fetch market insight" }, { status: 500 });
     }
 }

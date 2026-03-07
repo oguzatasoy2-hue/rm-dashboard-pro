@@ -15,7 +15,7 @@ export async function GET() {
         ];
 
         return NextResponse.json(benchmarkData, { status: 200 });
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: "Failed to fetch benchmark data" }, { status: 500 });
     }
 }

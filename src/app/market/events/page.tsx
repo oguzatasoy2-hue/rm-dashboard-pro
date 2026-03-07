@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { MapPin, Loader2, Calendar, Users, Zap, ExternalLink, Filter } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
 import { siteConfig } from "@/config/site";
-import { apiClient } from "@/lib/api-client";
+import { apiClient, type MarketEventsResponse } from "@/lib/api-client";
 
 const strictEase = [0.16, 1, 0.3, 1] as const;
 
@@ -20,7 +20,7 @@ const itemVariants = {
 };
 
 export default function EventTrackerPage() {
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<MarketEventsResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -86,7 +86,7 @@ export default function EventTrackerPage() {
                     </div>
 
                     <motion.div variants={itemVariants} className="grid grid-cols-1 gap-4">
-                        {data.events.map((event: any) => (
+                        {data?.events.map((event) => (
                             <div
                                 key={event.id}
                                 className="group relative overflow-hidden bg-white/[0.02] border border-white/[0.08] hover:border-white/20 rounded-2xl p-6 transition-all duration-300"

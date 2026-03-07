@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from "recharts";
+import type { TooltipProps } from "recharts";
 import { Shield, TrendingUp, Users, Target, Loader2, MapPin } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
 import { siteConfig } from "@/config/site";
@@ -24,9 +25,9 @@ const itemVariants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: strictEase } }
 };
 
-interface CustomRadarTooltipProps {
+interface CustomRadarTooltipProps extends TooltipProps<number, string> {
     active?: boolean;
-    payload?: any[];
+    payload?: { value: number; name: string; color: string; payload: { subject: string } }[];
 }
 
 const CustomRadarTooltip = ({ active, payload }: CustomRadarTooltipProps) => {
@@ -187,7 +188,7 @@ export default function STRBenchmarkPage() {
                             The CompSet represents a competitive basket of 5 luxury properties in the same geographic area, used to benchmark relative performance.
                         </p>
                         <p className="text-sm text-zinc-500 leading-relaxed mb-6">
-                            This radar chart maps your property's overall performance signature against the competitive set average across 6 dimensions.
+                            This radar chart maps your property&apos;s overall performance signature against the competitive set average across 6 dimensions.
                         </p>
 
                         <div className="space-y-4">

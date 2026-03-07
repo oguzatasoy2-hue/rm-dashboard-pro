@@ -2,9 +2,9 @@ export type NicheType = "hotel" | "saas" | "ecommerce";
 
 // ==========================================
 // 🎯 ACTIVE THEME SELECTOR
-// Change this value to switch the dashboard's entire industry!
+// Uses environment variable for build-time tree-shaking
 // ==========================================
-export const ACTIVE_NICHE: NicheType = "hotel";
+export const ACTIVE_NICHE: NicheType = (process.env.NEXT_PUBLIC_NICHE as NicheType) || "hotel";
 
 export const nichesInfo = {
     hotel: {
@@ -48,6 +48,9 @@ export const nichesInfo = {
             forecast: "Churn Forecast",
             parity: "Competitor Pricing",
             str: "SaaS Benchmark",
+            comparison: "Market Comparison",
+            events: "Growth Events",
+            pulse: "Signal Pulse",
         },
         kpis: {
             yieldVal1: "Our ARPU (Avg Revenue Per User)",
@@ -61,6 +64,7 @@ export const nichesInfo = {
             forecastPace: "Net Retention Pace",
             parityUndercut: "Competitor Discount Risk",
             strDirect: "Organic Acquisition %",
+            pulseSentiment: "Churn Risk Score",
         }
     },
     ecommerce: {
@@ -74,6 +78,9 @@ export const nichesInfo = {
             forecast: "Inventory Forecast",
             parity: "Market Pricing",
             str: "Retail Benchmark",
+            comparison: "Price Pulse",
+            events: "Promo Calendar",
+            pulse: "Trend Pulse",
         },
         kpis: {
             yieldVal1: "Our AOV (Base Cart)",
@@ -87,6 +94,7 @@ export const nichesInfo = {
             forecastPace: "Sales Velocity",
             parityUndercut: "Reseller Discount Risk",
             strDirect: "Direct Sales %",
+            pulseSentiment: "Buyer Sentiment Score",
         }
     }
 };

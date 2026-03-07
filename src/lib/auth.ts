@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
 
 const SECRET_KEY = process.env.AUTH_SECRET || "fallback_secret_for_dev_only";
 
@@ -48,7 +47,7 @@ async function verify(token: string, secret: string) {
         );
         if (!isValid) return null;
         return JSON.parse(payload);
-    } catch (e) {
+    } catch {
         return null;
     }
 }

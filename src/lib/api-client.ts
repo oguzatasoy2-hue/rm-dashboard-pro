@@ -70,6 +70,89 @@ export interface Recommendation {
     actioned: boolean;
 }
 
+export interface ComparisonCompetitor {
+    name: string;
+    segment: string;
+}
+
+export interface ComparisonTimeline {
+    date: string;
+    provençal: number;
+    [key: string]: number | string;
+}
+
+export interface ComparisonData {
+    summary: {
+        positioning_index: number;
+        our_average: number;
+        market_average: number;
+        most_expensive_comp: string;
+    };
+    competitors: ComparisonCompetitor[];
+    timeline: ComparisonTimeline[];
+}
+
+export interface MarketEvent {
+    id: string;
+    title: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    impact: "High" | "Medium" | "Low" | "Very High";
+    category: string;
+    attendance: number;
+    distanceFromHotel: string;
+    source: string;
+}
+
+export interface MarketEventsResponse {
+    city: string;
+    district: string;
+    hotel_context: string;
+    events: MarketEvent[];
+    summary: {
+        next_30_days: number;
+        peak_impact_date: string;
+        total_estimated_attendance: number;
+    };
+}
+
+export interface PulsePillar {
+    category: string;
+    our_score: number;
+    comp_avg: number;
+    delta: number;
+    priority: "low" | "medium" | "high";
+}
+
+export interface CompetitorInsight {
+    hotel: string;
+    strength: string;
+    impact: number;
+    mention_rate: string;
+}
+
+export interface InvestmentItem {
+    item: string;
+    cost_estimate: string;
+    revenue_potential: string;
+    urgency: "CRITICAL" | "MEDIUM" | "LOW";
+    logic: string;
+}
+
+export interface MarketPulseData {
+    readonly score: number;
+    readonly trend: string;
+    readonly pillars: readonly PulsePillar[];
+    readonly competitor_insights: readonly CompetitorInsight[];
+    readonly investment_roadmap: readonly InvestmentItem[];
+    readonly cash_cow: {
+        readonly item: string;
+        readonly strength: string;
+        readonly advice: string;
+    };
+}
+
 // --- Client ---
 
 export const apiClient = {
@@ -103,15 +186,21 @@ export const apiClient = {
         return res.json();
     },
 
-    async getComparison(): Promise<any> {
+    async getComparison(): Promise<ComparisonData> {
         const res = await fetch('/api/market/comparison', { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch comparison data');
         return res.json();
     },
 
-    async getEvents(): Promise<any> {
+    async getEvents(): Promise<MarketEventsResponse> {
         const res = await fetch('/api/market/events', { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch events data');
+        return res.json();
+    },
+
+    async getPulse(): Promise<MarketPulseData> {
+        const res = await fetch('/api/market/pulse', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch pulse data');
         return res.json();
     },
 
@@ -121,7 +210,7 @@ export const apiClient = {
         return res.json();
     },
 
-    async sendFeedback(data: any): Promise<any> {
+    async sendFeedback(data: Record<string, unknown>): Promise<{ success: boolean }> {
         const res = await fetch('/api/feedback', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import type { TooltipProps } from "recharts";
 import { CloudRain, Search, Calendar, MapPin, Loader2 } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
 import { siteConfig } from "@/config/site";
-import { apiClient, type MarketInsight } from "@/lib/api-client";
+import { apiClient } from "@/lib/api-client";
 
 // Vercel/Linear strict animation curve
 const strictEase = [0.16, 1, 0.3, 1] as const;
@@ -24,15 +25,16 @@ const itemVariants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: strictEase } }
 };
 
-interface CustomTooltipProps {
+// Recharts 3.x Tooltip Content Props definition
+interface CustomTooltipProps extends TooltipProps<number, string> {
     active?: boolean;
-    payload?: any[];
+    payload?: { value: number; name: string; color: string; payload: Record<string, unknown> }[];
     label?: string;
 }
 
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
-        const dataPoint = payload[0].payload;
+        const dataPoint = payload[0].payload as { hasEvent: boolean };
         return (
             <div className="bg-[#09090B] border border-white/10 p-4 rounded-xl shadow-2xl backdrop-blur-md min-w-[200px]">
                 <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
@@ -44,20 +46,15 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
                     )}
                 </div>
                 <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-6">
-                        <div className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
-                            <span className="text-zinc-400 text-xs font-medium">{siteConfig.kpis.marketSearch}</span>
+                    {payload.map((entry, index) => (
+                        <div key={index} className="flex items-center justify-between gap-6">
+                            <div className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: entry.color || '#FFFFFF', boxShadow: entry.color === '#FFFFFF' ? '0 0 8px rgba(255,255,255,0.8)' : 'none' }}></span>
+                                <span className={entry.color === 'var(--primary)' ? "text-primary text-xs font-medium" : "text-zinc-400 text-xs font-medium"}>{entry.name}</span>
+                            </div>
+                            <span className={entry.color === 'var(--primary)' ? "text-primary font-semibold tabular-nums" : "text-white font-semibold tabular-nums"}>{entry.value}/100</span>
                         </div>
-                        <span className="text-white font-semibold tabular-nums">{payload[0]?.value}/100</span>
-                    </div>
-                    <div className="flex items-center justify-between gap-6">
-                        <div className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                            <span className="text-primary text-xs font-medium">{siteConfig.kpis.marketDemand}</span>
-                        </div>
-                        <span className="text-primary font-semibold tabular-nums">{payload[1]?.value}/100</span>
-                    </div>
+                    ))}
                 </div>
             </div>
         );
@@ -66,7 +63,7 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
 };
 
 export default function MarketInsightPage() {
-    const [data, setData] = useState<any[]>([]); // Keeping any[] for simplicity in mock data for now, but fixing the others
+    const [data, setData] = useState<unknown[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -75,8 +72,8 @@ export default function MarketInsightPage() {
             try {
                 const insightData = await apiClient.getMarketInsight();
                 setData(insightData);
-            } catch (error) {
-                console.error("Failed to load market insight:", error);
+            } catch (err) {
+                console.error("Failed to load market insight:", err);
             } finally {
                 setIsLoading(false);
             }
@@ -219,10 +216,9 @@ export default function MarketInsightPage() {
                                     dataKey="marketDemand"
                                     stroke="var(--primary)"
                                     strokeWidth={2.5}
-                                    dot={(props: any) => {
-                                        // Only draw a dot where there is an event
-                                        const { cx, cy, payload } = props;
-                                        if (payload.hasEvent) {
+                                    dot={(props: unknown) => {
+                                        const { cx, cy, payload } = props as { cx?: number; cy?: number; payload?: { hasEvent: boolean } };
+                                        if (payload?.hasEvent && typeof cx === 'number' && typeof cy === 'number') {
                                             return (
                                                 <circle cx={cx} cy={cy} r={6} fill="var(--primary)" stroke="#09090B" strokeWidth={2} style={{ filter: 'drop-shadow(0 0 10px var(--primary))' }} />
                                             );
