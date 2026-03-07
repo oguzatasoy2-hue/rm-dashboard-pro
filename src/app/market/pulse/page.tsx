@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
     BrainCircuit, ArrowUpRight, TrendingUp, AlertTriangle,
     Sparkles, Zap, Smartphone, Coffee, Tv2, MessageSquare,
@@ -53,12 +53,15 @@ export default function SemanticPulsePage() {
     }
 
     return (
-        <div className="w-full h-full p-8 md:p-12 overflow-y-auto custom-scrollbar bg-[#09090B] pb-40">
+        <div className="w-full h-full p-8 md:p-12 overflow-y-auto custom-scrollbar bg-[#09090B] pb-40 relative">
+            {/* Background Decorative Element - Fixed Constraints */}
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+
             <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="w-full max-w-7xl mx-auto space-y-12"
+                className="w-full max-w-7xl mx-auto space-y-12 relative z-10"
             >
                 {/* Header */}
                 <motion.div variants={itemVariants} className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
@@ -76,7 +79,7 @@ export default function SemanticPulsePage() {
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-6 p-6 bg-white/[0.02] border border-white/5 rounded-3xl">
+                    <div className="flex items-center gap-6 p-6 bg-white/[0.02] border border-white/5 rounded-3xl backdrop-blur-md">
                         <div className="flex flex-col items-end">
                             <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-1">Sentiment Score</span>
                             <div className="flex items-end gap-2 text-primary font-black tracking-tighter italic">
@@ -104,7 +107,7 @@ export default function SemanticPulsePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                     {/* LEFT COLUMN: Sentiment Radar */}
                     <div className="lg:col-span-7 space-y-10">
-                        <motion.div variants={itemVariants} className="bg-[#0D0D0F] border border-white/[0.05] rounded-3xl p-8">
+                        <motion.div variants={itemVariants} className="bg-[#0D0D0F] border border-white/[0.05] rounded-3xl p-8 relative overflow-hidden">
                             <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-8 flex items-center gap-2">
                                 <BarChart3 size={14} className="text-primary" />
                                 Piliers de Satisfaction Comparative
@@ -123,12 +126,12 @@ export default function SemanticPulsePage() {
                                             </span>
                                         </div>
                                         <div className="h-2 w-full bg-white/[0.03] rounded-full overflow-hidden relative">
-                                            {/* Competitor Average (Background) */}
+                                            {/* Competitor Average (Background Indicator) */}
                                             <div
-                                                className="h-full bg-white/[0.1] transition-all duration-1000"
+                                                className="h-full bg-white/[0.1] absolute top-0 left-0 transition-all duration-1000"
                                                 style={{ width: `${pillar.comp_avg}%` }}
                                             />
-                                            {/* Our Score (Foreground) */}
+                                            {/* Our Score (Foreground Indicator) */}
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: `${pillar.our_score}%` }}
@@ -145,7 +148,7 @@ export default function SemanticPulsePage() {
 
                         <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {data.competitor_insights.map((insight: any, i: number) => (
-                                <div key={i} className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-6 group hover:border-primary/20 transition-all">
+                                <div key={i} className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-6 group hover:border-primary/20 transition-all backdrop-blur-sm">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="px-2.5 py-1 bg-zinc-800 rounded text-[9px] font-black text-zinc-400 uppercase tracking-widest">{insight.mention_rate}</div>
                                         <AlertTriangle size={14} className="text-red-500 opacity-50" />
@@ -180,7 +183,7 @@ export default function SemanticPulsePage() {
                             </div>
                         </motion.div>
 
-                        <motion.div variants={itemVariants} className="bg-[#0D0D0F] border border-white/[0.05] rounded-3xl overflow-hidden shadow-2xl">
+                        <motion.div variants={itemVariants} className="bg-[#0D0D0F] border border-white/[0.05] rounded-3xl overflow-hidden shadow-2xl backdrop-blur-sm">
                             <div className="px-8 py-6 border-b border-white/[0.05] flex items-center justify-between bg-white/[0.02]">
                                 <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2">
                                     <Zap size={12} className="text-primary" />
