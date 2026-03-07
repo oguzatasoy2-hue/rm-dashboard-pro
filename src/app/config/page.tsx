@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useActionState, useEffect } from "react";
+import React, { useActionState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Settings, Save, MapPin, Building2, Key, Globe, Loader2, CheckCircle2, Palmtree, ShieldCheck, Zap, BellOff } from "lucide-react";
 import ModuleInfo from "@/components/ModuleInfo";
@@ -24,20 +24,8 @@ const itemVariants = {
 };
 
 export default function ConfigPage() {
-    const [vacationMode, setVacationMode] = useState(false);
+    const [vacationMode, setVacationMode] = React.useState(false);
     const [state, formAction, isPending] = useActionState(saveConfig, null);
-    const [showSuccess, setShowSuccess] = useState(false);
-
-    useEffect(() => {
-        if (state?.success) {
-            const timeout = setTimeout(() => setShowSuccess(true), 0);
-            const timer = setTimeout(() => setShowSuccess(false), 3000);
-            return () => {
-                clearTimeout(timeout);
-                clearTimeout(timer);
-            };
-        }
-    }, [state?.success]);
 
     return (
         <div className="w-full h-full p-8 overflow-y-auto custom-scrollbar flex justify-center pb-24">
@@ -260,8 +248,9 @@ export default function ConfigPage() {
                     {/* Actions */}
                     <div className="flex justify-end pt-4 gap-4 items-center">
                         <AnimatePresence>
-                            {showSuccess && (
+                            {state?.success && (
                                 <motion.div
+                                    key={state.timestamp}
                                     initial={{ opacity: 0, x: 10 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: 10 }}
