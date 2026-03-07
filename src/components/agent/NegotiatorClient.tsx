@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Bot, ShieldCheck, Zap, History, ExternalLink, ArrowUpRight, Scale, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Bot, ShieldCheck, Zap, History, ExternalLink, ArrowUpRight, Scale, AlertCircle, CheckCircle2, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NegotiationLog } from "@/lib/api-client";
 import ModuleInfo from "@/components/ModuleInfo";
@@ -38,7 +38,10 @@ export default function NegotiatorClient({ data }: { data: NegotiationLog[] }) {
                                 <Bot size={24} className="text-primary" />
                             </div>
                             <h1 className="text-3xl font-semibold text-white tracking-tight">Agent Négociateur</h1>
-                            <span className="px-2 py-0.5 bg-primary/10 border border-primary/20 text-primary text-[8px] font-black uppercase tracking-[0.2em] rounded-sm">Premium</span>
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 bg-white/[0.03] border border-white/[0.08] rounded-full">
+                                <Target size={8} className="text-primary fill-primary/20" />
+                                <span className="text-primary text-[8px] font-black uppercase tracking-[0.2em]">Premium</span>
+                            </div>
                         </div>
                         <p className="text-zinc-500 text-sm max-w-lg">Autonomous parity enforcement. Detects OTAs undercuts and initiates automated contractual disputes.</p>
                     </div>

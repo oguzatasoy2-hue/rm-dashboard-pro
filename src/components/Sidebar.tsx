@@ -129,8 +129,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                 )}
 
                                 {item.isPremium && !isActive && (
-                                    <div className="absolute right-3 px-1.5 py-0.5 rounded-[4px] bg-primary/10 border border-primary/20">
-                                        <span className="text-[7px] font-black text-primary uppercase tracking-widest">PRO</span>
+                                    <div className="absolute right-3 flex items-center gap-1.5">
+                                        <div className="w-1 h-1 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
+                                        <span className="text-[8px] font-bold text-zinc-500 group-hover:text-zinc-300 uppercase tracking-widest transition-colors">PRO</span>
                                     </div>
                                 )}
                             </Link>
