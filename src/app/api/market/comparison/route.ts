@@ -29,12 +29,12 @@ export async function GET() {
 
             return {
                 date: dateStr,
-                provençal: basePrice + Math.sin(i) * 5,
-                "Pullman Bordeaux Lac": (basePrice * 1.25) + Math.cos(i) * 10,
-                "Mercure Bordeaux Lac": (basePrice * 1.1) + Math.sin(i * 1.5) * 8,
-                "Novotel Bordeaux Lac": (basePrice * 1.05) + Math.cos(i * 0.8) * 6,
-                "Ibis Bordeaux Lac": (basePrice * 0.85) + Math.sin(i * 2) * 4,
-                "Campanile Bordeaux Lac": (basePrice * 0.8) + Math.cos(i * 1.2) * 5
+                provençal: Math.round(basePrice + Math.sin(i) * 5),
+                "Pullman Bordeaux Lac": Math.round((basePrice * 1.25) + Math.cos(i) * 10),
+                "Mercure Bordeaux Lac": Math.round((basePrice * 1.1) + Math.sin(i * 1.5) * 8),
+                "Novotel Bordeaux Lac": Math.round((basePrice * 1.05) + Math.cos(i * 0.8) * 6),
+                "Ibis Bordeaux Lac": Math.round((basePrice * 0.85) + Math.sin(i * 2) * 4),
+                "Campanile Bordeaux Lac": Math.round((basePrice * 0.8) + Math.cos(i * 1.2) * 5)
             };
         });
 
@@ -57,8 +57,8 @@ export async function GET() {
             competitors: competitors,
             timeline: timeline,
             summary: {
-                market_average: parseFloat(marketAvg.toFixed(2)),
-                our_average: parseFloat(ourAvg.toFixed(2)),
+                market_average: Math.round(marketAvg),
+                our_average: Math.round(ourAvg),
                 positioning_index: parseFloat((ourAvg / marketAvg).toFixed(3)),
                 cheapest_competitor: currentAverages.sort((a, b) => a.avg - b.avg)[0].name,
                 most_expensive_comp: currentAverages.sort((a, b) => b.avg - a.avg)[0].name,

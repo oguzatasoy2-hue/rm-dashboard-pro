@@ -25,9 +25,9 @@ export async function GET() {
 
             const basePrice = 145;
             const priceVariance = (occupancy > 80 ? 40 : occupancy > 60 ? 20 : 0);
-            const price = basePrice + priceVariance + (isWeekend ? 30 : 0);
+            const price = Math.round(basePrice + priceVariance + (isWeekend ? 30 : 0));
 
-            const wtp = price + 15 + Math.random() * 10;
+            const wtp = Math.round(price + 15 + Math.random() * 10);
             const pace = Math.round(Math.sin(i * 0.8) * 5 + (occupancy / 20));
 
             // Random local event mapping
